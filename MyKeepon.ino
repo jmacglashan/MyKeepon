@@ -1,10 +1,21 @@
-/*--------------------------------------
- My Keepon Arduino controller
- http://github.com/BeatBots/MyKeepon
- http://mykeepon.beatbots.net
- Copyright © 2012 BeatBots LLC
- Keepon® is a trademark of BeatBots LLC
- --------------------------------------*/
+/* My Keepon Arduino controller
+   Copyright © 2012 BeatBots LLC
+
+   This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+   For a copy of the GNU General Public License, see
+   http://www.gnu.org/licenses/gpl.html
+
+   For support, please post issues on the Github project page at
+   http://github.com/BeatBots/MyKeepon
+
+   Learn more about My Keepon at
+   http://mykeepon.beatbots.net
+
+   Keepon® is a trademark of BeatBots LLC.
+*/
 
 #include <Wire.h>
 
