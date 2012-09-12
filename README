@@ -1,0 +1,60 @@
+My Keepon Arduino controller
+
+by Marek Michalowski (BeatBots)
+with Kyle Machulis (Nonpolynomial Labs) & Mark Gasson (Wow! Stuff)
+
+http://github.com/BeatBots/MyKeepon
+http://mykeepon.beatbots.net
+
+Copyright © 2012 BeatBots LLC.
+Keepon® is a trademark of BeatBots LLC.
+
+
+INSTRUCTIONS
+
+Connect the following pins with a 4-wire ribbon cable:
+
+My Keepon  <->  Arduino
+---------       -------
+V               A0
+Cl              A5
+Da              A4
+G               GND
+
+Then compile this code to your Arduino.  (Recommended & tested: Arduino Nano v3.)
+  
+With My Keepon powered off, use the Arduino Serial Monitor (or otherwise connect to the Arduino with your own application, e.g. Max patch MyKeepon.maxpat or standalone MyKeepon.app, which we provide here) at 115200 baud.
+
+Turn on your My Keepon.  You should receive a "My Keepon detected" message.
+  
+Allowable commands (the closing semicolon is required):
+    SOUND PLAY <0...63>;
+    SOUND REPEAT <0...63>;
+    SOUND DELAY <msec>;
+    SOUND STOP;
+    SPEED [PAN, TILT, PONSIDE] <0...255>;
+    MOVE PAN <-100...100>;
+    MOVE TILT <-100...100>;
+    MOVE SIDE [CYCLE, CENTERFROMLEFT, RIGHT, CENTERFROMRIGHT, LEFT];
+    MOVE PON [UP, HALFDOWN, DOWN, HALFUP];
+    MOVE STOP;
+    MODE [DANCE, TOUCH];
+    MODE TEMPO;
+    MODE SLEEP;
+
+Strings that the Arduino can send back to you:
+    BUTTON [DANCE, TOUCH] [OFF, ON]
+    BUTTON [HEAD, FRONT, BACK, RIGHT, LEFT] [OFF, ON]
+    MOTOR [PAN, TILT, SIDE, PON] FINISHED
+    MOTOR [PAN, TILT, SIDE, PON] STALLED
+    ENCODER TILT [NOREACH, FORWARD, BACK, UP]
+    ENCODER PON [HALFDOWN, UP, DOWN, HALFUP]
+    ENCODER SIDE [CENTER, RIGHT, LEFT]
+    ENCODER PAN [BACK, RIGHT, LEFT, CENTER]
+    EMF [PAN, TILT, PONSIDE] [-127...127]
+    POSITION [PAN, TILT, PONSIDE] [VAL]
+    AUDIO TEMPO [VAL]
+    AUDIO AMPLITUDE [0..64]
+    AUDIO RANGE [0...64]
+    AUDIO ENVELOPE [VAL]
+    AUDIO BPM [67, 80, 100, 133, 200]
