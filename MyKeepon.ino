@@ -273,7 +273,7 @@ void query() {
       }
       motorResponse = Wire.read();
       if (motorResponse != audioState[1]) {
-        Serial.print("AUDIO AMPLITUDE ");
+        Serial.print("AUDIO MEAN ");
         Serial.println(motorResponse);
         audioState[1] = motorResponse;
       }
