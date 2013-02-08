@@ -2,9 +2,9 @@
 
 #include "ofMain.h"
 #include "ofxUI.h"
+#include "MyKeeponControlPanel.h"
 
 class testApp : public ofBaseApp{
-
 	public:
 		testApp();
 	
@@ -27,8 +27,9 @@ class testApp : public ofBaseApp{
 		void mainGuiEvent(ofxUIEventArgs &e);
 
 		// panels
-		vector<ofxUICanvas*> thePanels;
+		vector<MyKeeponControlPanel*> thePanels;
 
-		// helpers
+	protected:
+		void adjustPanels();
 		string fitStringToWidth(const string s, const int w, ofTrueTypeFont ttf);
 };

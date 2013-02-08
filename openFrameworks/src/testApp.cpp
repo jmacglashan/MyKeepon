@@ -1,5 +1,7 @@
 #include "testApp.h"
 
+#define PANEL_WIDTH 100
+
 //--------------------------------------------------------------
 testApp::testApp() :
 mainGui(0,0,ofGetWidth(),ofGetHeight()/20),
@@ -22,6 +24,26 @@ void testApp::setup(){
 
 //--------------------------------------------------------------
 void testApp::update(){
+	bool adjustNeeded = false;
+
+	// update all panels, check if any have to be removed
+	for(int i=thePanels.size()-1; i>-1; --i){
+		MyKeeponControlPanel* mp = thePanels.at(i);
+		if(mp->toDelete()){
+			delete mp;
+			thePanels.erase(thePanels.begin()+i);
+			adjustNeeded = true;
+		}
+		else{
+			mp->update();
+		}
+	}
+	// adjust panels if needed
+	if(adjustNeeded){
+		adjustPanels();
+	}
+
+	// for DEBUG
 	if(ofGetFrameNum()%100 == 0){
 		cout << ofGetFrameRate() << endl;
 	}
@@ -36,7 +58,20 @@ void testApp::draw(){
 void testApp::mainGuiEvent(ofxUIEventArgs &e){
 	string name = e.widget->getName();
 	if((name.compare("Add a Keepon") == 0) && (((ofxUIButton*)e.widget)->getValue())){
-		cout << "ADDING\n";
+		// only important to get correct y position for the panels
+		//      the x position is adjusted later
+		MyKeeponControlPanel* mp = new MyKeeponControlPanel(ofVec2f(0,mainGui.getRect()->y+mainGui.getRect()->height+10));
+		thePanels.push_back(mp);
+		adjustPanels();
+	}
+}
+
+//--------------------------------------------------------------
+void testApp::adjustPanels(){
+	for(int i=0, xPos=0; i<thePanels.size(); ++i){
+		MyKeeponControlPanel* mp = thePanels.at(i);
+		mp->setX(xPos);
+		xPos += mp->getRectangle().width + 10;
 	}
 }
 
@@ -85,6 +120,7 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
+//--------------------------------------------------------------
 // doesn't exclude empty words
 string testApp::fitStringToWidth(const string s, const int w, ofTrueTypeFont ttf){
 	string retStr="";
