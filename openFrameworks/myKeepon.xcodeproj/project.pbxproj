@@ -15,6 +15,7 @@
 		AFB73FFD16C4740500D61F26 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB73FF716C4740500D61F26 /* tinyxmlerror.cpp */; };
 		AFB73FFE16C4740500D61F26 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB73FF816C4740500D61F26 /* tinyxmlparser.cpp */; };
 		AFB73FFF16C4740500D61F26 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB73FFA16C4740500D61F26 /* ofxXmlSettings.cpp */; };
+		AFB7400216C492E800D61F26 /* MyKeeponControlPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB7400016C492E800D61F26 /* MyKeeponControlPanel.cpp */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
 		E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */; };
@@ -108,6 +109,8 @@
 		AFB73FF816C4740500D61F26 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
 		AFB73FFA16C4740500D61F26 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
 		AFB73FFB16C4740500D61F26 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
+		AFB7400016C492E800D61F26 /* MyKeeponControlPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyKeeponControlPanel.cpp; sourceTree = "<group>"; };
+		AFB7400116C492E800D61F26 /* MyKeeponControlPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyKeeponControlPanel.h; sourceTree = "<group>"; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
@@ -315,6 +318,8 @@
 				AFB739F716C4701D00D61F26 /* main.cpp */,
 				AFB739F816C4701D00D61F26 /* testApp.cpp */,
 				AFB739F916C4701D00D61F26 /* testApp.h */,
+				AFB7400016C492E800D61F26 /* MyKeeponControlPanel.cpp */,
+				AFB7400116C492E800D61F26 /* MyKeeponControlPanel.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -417,6 +422,7 @@
 				AFB73FFD16C4740500D61F26 /* tinyxmlerror.cpp in Sources */,
 				AFB73FFE16C4740500D61F26 /* tinyxmlparser.cpp in Sources */,
 				AFB73FFF16C4740500D61F26 /* ofxXmlSettings.cpp in Sources */,
+				AFB7400216C492E800D61F26 /* MyKeeponControlPanel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
