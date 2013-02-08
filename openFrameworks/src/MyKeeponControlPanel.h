@@ -14,6 +14,10 @@ class MyKeeponControlPanel{
 		const ofRectangle getRectangle();
 	private:
 		ofxUICanvas mGui;
-		bool bDelete;
+		ofxUIDropDownList* mDDList;
+		ofSerial mSerial;
+		bool bDelete, bUpdateSerialList;
+		static vector<string> theSerials;
+		static vector<string>& updateSerialList();
 		// put the dance state stuff here too
 };

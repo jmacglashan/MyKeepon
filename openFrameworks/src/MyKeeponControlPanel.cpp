@@ -1,15 +1,32 @@
 #include "MyKeeponControlPanel.h"
 
+vector<string> MyKeeponControlPanel::theSerials = vector<string>();
+
+vector<string>& MyKeeponControlPanel::updateSerialList(){
+	theSerials.clear();
+	theSerials.push_back("Refresh List");
+	
+	ofSerial tSerial;
+	vector<ofSerialDeviceInfo> serialList = tSerial.getDeviceList();
+	for(int i=0; i<serialList.size(); i++){
+		string thisDevicePath = serialList.at(i).getDevicePath();
+		theSerials.push_back(thisDevicePath);
+	}
+	return theSerials;
+}
+
 MyKeeponControlPanel::MyKeeponControlPanel(const ofVec2f p):
 mGui(p.x,p.y,0,0) {
 	bDelete = false;
 
 	/////////////// my GUI
-	// TODO: setup vector with list of serial ports
 
 	mGui.setFont("verdana.ttf");
 	mGui.addWidgetDown(new ofxUILabel("Control Panel", OFX_UI_FONT_MEDIUM));
 	mGui.addSpacer(mGui.getRect()->width,4);
+	mDDList = (ofxUIDropDownList *) mGui.addWidgetDown(new ofxUIDropDownList("Serial List", updateSerialList()));
+	mDDList->setAutoClose(true);
+
 	mGui.addWidgetDown(new ofxUILabelButton("Remove", false));
 	// TODO:  add other stuff here
 
@@ -21,7 +38,16 @@ mGui(p.x,p.y,0,0) {
 MyKeeponControlPanel::~MyKeeponControlPanel(){}
 
 void MyKeeponControlPanel::update(){
-	// set up timers and stuff to send signals to serial port
+	// check if we have to update the list of serial connections on this panel
+	if(bUpdateSerialList){
+		mDDList->clearToggles();
+		updateSerialList();
+		for(int i=0; i<theSerials.size(); i++){
+			mDDList->addToggle(theSerials.at(i));
+		}
+		bUpdateSerialList = false;
+	}
+	// TODO: set up timers and stuff to send signals to serial port
 }
 
 void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
@@ -29,6 +55,23 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	if((name.compare("Remove") == 0) && (((ofxUIButton*)args.widget)->getValue())){
 		bDelete = true;
 	}
+	else if(name.compare("Serial List") == 0) {
+		ofxUIDropDownList *ddlist = (ofxUIDropDownList *) args.widget;
+		if(ddlist->getSelected().size()) {
+			string selection = ddlist->getSelected()[0]->getName();
+			// check if refresh
+			if(selection.compare("Refresh List") == 0){
+				bUpdateSerialList = true;
+			}
+			// else setup internal serial
+			else{
+				mSerial.close();
+				mSerial.setup(selection, 115200);
+			}
+			ddlist->clearSelected();
+		}
+	}
+
 }
 
 const bool& MyKeeponControlPanel::toDelete() const{
