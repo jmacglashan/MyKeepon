@@ -68,13 +68,14 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 				// refresh static list, but only update dropdown on next call to update()
 				updateSerialList();
 				bUpdateSerialList = true;
+				ddlist->clearSelected();
 			}
-			// else setup a serial connection
-			else{
+			// else, if clicked on an item, try to setup a serial connection
+			// TODO: add some feedback as to whether we're connected and to what
+			else if(!ddlist->isOpen()) {
 				mSerial.close();
 				mSerial.setup(selection, 115200);
 			}
-			ddlist->clearSelected();
 		}
 	}
 
