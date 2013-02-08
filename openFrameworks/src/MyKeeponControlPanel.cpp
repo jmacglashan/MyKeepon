@@ -20,16 +20,20 @@ mGui(p.x,p.y,0,0) {
 	bDelete = false;
 
 	/////////////// my GUI
-
 	mGui.setFont("verdana.ttf");
 	mGui.addWidgetDown(new ofxUILabel("Control Panel", OFX_UI_FONT_MEDIUM));
 	mGui.addSpacer(mGui.getRect()->width,4);
+	// Serial Port list
 	mDDList = (ofxUIDropDownList *) mGui.addWidgetDown(new ofxUIDropDownList("Serial List", updateSerialList()));
 	mDDList->setAutoClose(true);
 
-	mGui.addWidgetDown(new ofxUILabelButton("Remove", false));
 	// TODO:  add other stuff here
+	//
+	
+	// remove button
+	mGui.addWidgetDown(new ofxUILabelButton("Remove", false));
 
+	// finish gui stuff
 	mGui.autoSizeToFitWidgets();
 	mGui.setColorBack(ofColor(100,200));
 	ofAddListener(mGui.newGUIEvent,this,&MyKeeponControlPanel::guiListener);
@@ -41,7 +45,6 @@ void MyKeeponControlPanel::update(){
 	// check if we have to update the list of serial connections on this panel
 	if(bUpdateSerialList){
 		mDDList->clearToggles();
-		updateSerialList();
 		for(int i=0; i<theSerials.size(); i++){
 			mDDList->addToggle(theSerials.at(i));
 		}
@@ -59,11 +62,12 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 		ofxUIDropDownList *ddlist = (ofxUIDropDownList *) args.widget;
 		if(ddlist->getSelected().size()) {
 			string selection = ddlist->getSelected()[0]->getName();
-			// check if refresh
 			if(selection.compare("Refresh List") == 0){
+				// refresh static list, but only update dropdown on next call to update()
+				updateSerialList();
 				bUpdateSerialList = true;
 			}
-			// else setup internal serial
+			// else setup a serial connection
 			else{
 				mSerial.close();
 				mSerial.setup(selection, 115200);
