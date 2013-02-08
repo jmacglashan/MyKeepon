@@ -39,7 +39,9 @@ mGui(p.x,p.y,0,0) {
 	ofAddListener(mGui.newGUIEvent,this,&MyKeeponControlPanel::guiListener);
 }
 
-MyKeeponControlPanel::~MyKeeponControlPanel(){}
+MyKeeponControlPanel::~MyKeeponControlPanel(){
+	mSerial.close();
+}
 
 void MyKeeponControlPanel::update(){
 	// check if we have to update the list of serial connections on this panel
