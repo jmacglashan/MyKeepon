@@ -59,6 +59,9 @@ void MyKeeponControlPanel::update(){
 		}
 		bUpdateSerialList = false;
 	}
+	if(bSerialInited) {
+		mSerial.flush();
+	}
 	// TODO: set up timers and stuff to send signals to serial port
 }
 
