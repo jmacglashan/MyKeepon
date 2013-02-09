@@ -18,18 +18,25 @@ vector<string>& MyKeeponControlPanel::updateSerialList(){
 MyKeeponControlPanel::MyKeeponControlPanel(const ofVec2f p):
 mGui(p.x,p.y,0,0) {
 	bDelete = false;
+	bSerialInited = false;
 
-	/////////////// my GUI
+	//////////////// my GUI
 	mGui.setFont("verdana.ttf");
 	mGui.addWidgetDown(new ofxUILabel("Control Panel", OFX_UI_FONT_MEDIUM));
 	mGui.addSpacer(mGui.getRect()->width,4);
-	// Serial Port list
+	////// Serial Port list
 	mDDList = (ofxUIDropDownList *) mGui.addWidgetDown(new ofxUIDropDownList("Serial List", updateSerialList()));
 	mDDList->setAutoClose(true);
+	////// 2D Pad for Pan/Tilt
+	mGui.addWidgetDown(new ofxUI2DPad("Pan/Tilt", ofPoint(-100,100), ofPoint(-100,100), ofPoint(0,0),
+									  10*mDDList->getRect()->height, 10*mDDList->getRect()->height));
+	///// Motor speeds
+	mGui.addWidgetDown(new ofxUISlider("Pan Speed", 0, 255, 128,10*mDDList->getRect()->height,mDDList->getRect()->height));
+	mGui.addWidgetDown(new ofxUISlider("Tilt Speed", 0, 255, 128,10*mDDList->getRect()->height,mDDList->getRect()->height));
+	mGui.addWidgetDown(new ofxUISlider("PonSide Speed", 0, 255, 128,10*mDDList->getRect()->height,mDDList->getRect()->height));
 
-	// TODO:  add other stuff here
-	//
-	
+	// synch button
+	mGui.addWidgetDown(new ofxUIToggle("Synchronize",false,mDDList->getRect()->height,mDDList->getRect()->height,0,0,OFX_UI_FONT_MEDIUM));
 	// remove button
 	mGui.addWidgetDown(new ofxUILabelButton("Remove", false));
 
@@ -57,10 +64,8 @@ void MyKeeponControlPanel::update(){
 
 void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	string name = args.widget->getName();
-	if((name.compare("Remove") == 0) && (((ofxUIButton*)args.widget)->getValue())){
-		bDelete = true;
-	}
-	else if(name.compare("Serial List") == 0) {
+	// Serial list bureaucracy
+	if(name.compare("Serial List") == 0) {
 		ofxUIDropDownList *ddlist = (ofxUIDropDownList *) args.widget;
 		if(ddlist->getSelected().size()) {
 			string selection = ddlist->getSelected()[0]->getName();
@@ -74,11 +79,49 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 			// TODO: add some feedback as to whether we're connected and to what
 			else if(!ddlist->isOpen()) {
 				mSerial.close();
-				mSerial.setup(selection, 115200);
+				bSerialInited = mSerial.setup(selection, 115200);
 			}
 		}
 	}
-
+	// immediate-mode stuff
+	else if(name.compare("Pan/Tilt") == 0) {
+		if(bSerialInited) {
+			int panV = (int)((ofxUI2DPad *)args.widget)->getScaledValue().x;
+			int tiltV = (int)((ofxUI2DPad *)args.widget)->getScaledValue().y;
+			string msg = "MOVE PAN "+ofToString(panV)+";";
+			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
+			msg = "MOVE TILT "+ofToString(tiltV)+";";
+			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
+		}
+	}
+	else if(name.compare("Pan Speed") == 0) {
+		if(bSerialInited) {
+			int speedV = (int)((ofxUISlider *)args.widget)->getScaledValue();
+			string msg = "SPEED PAN "+ofToString(speedV)+";";
+			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
+		}
+	}
+	else if(name.compare("Tilt Speed") == 0) {
+		if(bSerialInited) {
+			int speedV = (int)((ofxUISlider *)args.widget)->getScaledValue();
+			string msg = "SPEED TILT "+ofToString(speedV)+";";
+			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
+		}
+	}
+	else if(name.compare("PonSide Speed") == 0) {
+		if(bSerialInited) {
+			int speedV = (int)((ofxUISlider *)args.widget)->getScaledValue();
+			string msg = "SPEED PONSIDE "+ofToString(speedV)+";";
+			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
+		}
+	}
+	// management stuff
+	else if((name.compare("Synchronize") == 0) && (((ofxUIButton*)args.widget)->getValue())){
+		// TODO: synch code
+	}
+	else if((name.compare("Remove") == 0) && (((ofxUIButton*)args.widget)->getValue())){
+		bDelete = true;
+	}
 }
 
 const bool& MyKeeponControlPanel::toDelete() const{

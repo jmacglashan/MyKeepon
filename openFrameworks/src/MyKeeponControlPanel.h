@@ -16,7 +16,7 @@ class MyKeeponControlPanel{
 		ofxUICanvas mGui;
 		ofxUIDropDownList* mDDList;
 		ofSerial mSerial;
-		bool bDelete, bUpdateSerialList;
+		bool bDelete, bUpdateSerialList, bSerialInited;
 		static vector<string> theSerials;
 		static vector<string>& updateSerialList();
 		// put the dance state stuff here too
