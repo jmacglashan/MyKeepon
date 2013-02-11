@@ -28,12 +28,12 @@ mGui(p.x,p.y,0,0) {
 	mDDList = (ofxUIDropDownList *) mGui.addWidgetDown(new ofxUIDropDownList("Serial List", updateSerialList()));
 	mDDList->setAutoClose(true);
 	////// 2D Pad for Pan/Tilt
-	mGui.addWidgetDown(new ofxUI2DPad("Pan/Tilt", ofPoint(-100,100), ofPoint(-100,100), ofPoint(0,0),
+	mGui.addWidgetDown(new ofxUI2DPad("Pan/Tilt", ofPoint(0,1), ofPoint(1,0), ofPoint(0.5,0.5),
 									  10*mDDList->getRect()->height, 10*mDDList->getRect()->height));
 	///// Motor speeds
-	mGui.addWidgetDown(new ofxUISlider("Pan Speed", 0, 255, 128,10*mDDList->getRect()->height,mDDList->getRect()->height));
-	mGui.addWidgetDown(new ofxUISlider("Tilt Speed", 0, 255, 128,10*mDDList->getRect()->height,mDDList->getRect()->height));
-	mGui.addWidgetDown(new ofxUISlider("PonSide Speed", 0, 255, 128,10*mDDList->getRect()->height,mDDList->getRect()->height));
+	mGui.addWidgetDown(new ofxUISlider("Pan Speed", 0, 1, 0.5,10*mDDList->getRect()->height,mDDList->getRect()->height));
+	mGui.addWidgetDown(new ofxUISlider("Tilt Speed", 0, 1, 0.5,10*mDDList->getRect()->height,mDDList->getRect()->height));
+	mGui.addWidgetDown(new ofxUISlider("PonSide Speed", 0, 1, 0.5,10*mDDList->getRect()->height,mDDList->getRect()->height));
 
 	// synch button
 	mGui.addWidgetDown(new ofxUIToggle("Synchronize",false,mDDList->getRect()->height,mDDList->getRect()->height,0,0,OFX_UI_FONT_MEDIUM));
@@ -89,8 +89,9 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	// immediate-mode stuff
 	else if(name.compare("Pan/Tilt") == 0) {
 		if(bSerialInited) {
-			int panV = (int)((ofxUI2DPad *)args.widget)->getScaledValue().x;
-			int tiltV = (int)((ofxUI2DPad *)args.widget)->getScaledValue().y;
+			// TODO: change output min/max to prevent reaching limits
+			int panV = (int)ofMap(((ofxUI2DPad *)args.widget)->getScaledValue().x, 0,1, -100,100);
+			int tiltV = (int)ofMap(((ofxUI2DPad *)args.widget)->getScaledValue().y, 0,1, -100,100);
 			string msg = "MOVE PAN "+ofToString(panV)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 			msg = "MOVE TILT "+ofToString(tiltV)+";";
@@ -99,21 +100,24 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	}
 	else if(name.compare("Pan Speed") == 0) {
 		if(bSerialInited) {
-			int speedV = (int)((ofxUISlider *)args.widget)->getScaledValue();
+			// TODO: change output min/max to prevent reaching limits
+			int speedV = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
 			string msg = "SPEED PAN "+ofToString(speedV)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 		}
 	}
 	else if(name.compare("Tilt Speed") == 0) {
 		if(bSerialInited) {
-			int speedV = (int)((ofxUISlider *)args.widget)->getScaledValue();
+			// TODO: change output min/max to prevent reaching limits
+			int speedV = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
 			string msg = "SPEED TILT "+ofToString(speedV)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 		}
 	}
 	else if(name.compare("PonSide Speed") == 0) {
 		if(bSerialInited) {
-			int speedV = (int)((ofxUISlider *)args.widget)->getScaledValue();
+			// TODO: change output min/max to prevent reaching limits
+			int speedV = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
 			string msg = "SPEED PONSIDE "+ofToString(speedV)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 		}
