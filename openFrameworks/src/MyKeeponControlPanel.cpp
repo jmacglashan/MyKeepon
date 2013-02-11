@@ -89,9 +89,8 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	// immediate-mode stuff
 	else if(name.compare("Pan/Tilt") == 0) {
 		if(bSerialInited) {
-			// TODO: change output min/max to prevent reaching limits
-			values.pan = (int)ofMap(((ofxUI2DPad *)args.widget)->getScaledValue().x, 0,1, -100,100);
-			values.tilt = (int)ofMap(((ofxUI2DPad *)args.widget)->getScaledValue().y, 0,1, -100,100);
+			values.pan = (int)ofMap(((ofxUI2DPad *)args.widget)->getScaledValue().x, 0,1, -90,90);
+			values.tilt = (int)ofMap(((ofxUI2DPad *)args.widget)->getScaledValue().y, 0,1, 90,-90);
 			string msg = "MOVE PAN "+ofToString(values.pan)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 			msg = "MOVE TILT "+ofToString(values.tilt)+";";
@@ -100,16 +99,14 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	}
 	else if(name.compare("Pan Speed") == 0) {
 		if(bSerialInited) {
-			// TODO: change output min/max to prevent reaching limits
-			values.panSpeed = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
+			values.panSpeed = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 50,250);
 			string msg = "SPEED PAN "+ofToString(values.panSpeed)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 		}
 	}
 	else if(name.compare("Tilt Speed") == 0) {
 		if(bSerialInited) {
-			// TODO: change output min/max to prevent reaching limits
-			values.tiltSpeed = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
+			values.tiltSpeed = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 50,250);
 			string msg = "SPEED TILT "+ofToString(values.tiltSpeed)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 		}
