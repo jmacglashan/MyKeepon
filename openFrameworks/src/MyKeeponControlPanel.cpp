@@ -73,8 +73,6 @@ void MyKeeponControlPanel::update(){
 	
 	// check if we have to update due to sync
 	if(bUpdateGuiFromValues){
-		cout << "val:"<<values.pan << "," << values.tilt<<endl;
-		cout << "syncval:"<<syncValues.pan << "," << syncValues.tilt<<endl;
 		m2DPad->setValue(ofPoint(values.pan,values.tilt));
 		mPanSlider->setValue(values.panSpeed);
 		mTiltSlider->setValue(values.tiltSpeed);
@@ -151,7 +149,6 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	else if(name.compare("Synchronize") == 0){
 		bIsSync = ((ofxUIButton*)args.widget)->getValue();
 		if(bIsSync) {
-			cout << "sync\n";
 			// if first item, copy to syncValue
 			if(theSyncPanels.size() < 1){
 				syncValues = values;
@@ -164,7 +161,6 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 			theSyncPanels.insert(this);
 		}
 		else {
-			cout << "not sync\n";
 			// remove from vector of sync panels
 			theSyncPanels.erase(this);
 		}
