@@ -17,6 +17,10 @@ class MyKeeponControlPanel{
 		ofxUIDropDownList* mDDList;
 		ofSerial mSerial;
 		bool bDelete, bUpdateSerialList, bSerialInited;
+		struct V {
+			int pan, tilt;
+			int panSpeed, tiltSpeed, sideSpeed;
+		} values;
 		static vector<string> theSerials;
 		static vector<string>& updateSerialList();
 		// put the dance state stuff here too

@@ -90,35 +90,35 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	else if(name.compare("Pan/Tilt") == 0) {
 		if(bSerialInited) {
 			// TODO: change output min/max to prevent reaching limits
-			int panV = (int)ofMap(((ofxUI2DPad *)args.widget)->getScaledValue().x, 0,1, -100,100);
-			int tiltV = (int)ofMap(((ofxUI2DPad *)args.widget)->getScaledValue().y, 0,1, -100,100);
-			string msg = "MOVE PAN "+ofToString(panV)+";";
+			values.pan = (int)ofMap(((ofxUI2DPad *)args.widget)->getScaledValue().x, 0,1, -100,100);
+			values.tilt = (int)ofMap(((ofxUI2DPad *)args.widget)->getScaledValue().y, 0,1, -100,100);
+			string msg = "MOVE PAN "+ofToString(values.pan)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
-			msg = "MOVE TILT "+ofToString(tiltV)+";";
+			msg = "MOVE TILT "+ofToString(values.tilt)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 		}
 	}
 	else if(name.compare("Pan Speed") == 0) {
 		if(bSerialInited) {
 			// TODO: change output min/max to prevent reaching limits
-			int speedV = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
-			string msg = "SPEED PAN "+ofToString(speedV)+";";
+			values.panSpeed = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
+			string msg = "SPEED PAN "+ofToString(values.panSpeed)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 		}
 	}
 	else if(name.compare("Tilt Speed") == 0) {
 		if(bSerialInited) {
 			// TODO: change output min/max to prevent reaching limits
-			int speedV = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
-			string msg = "SPEED TILT "+ofToString(speedV)+";";
+			values.tiltSpeed = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
+			string msg = "SPEED TILT "+ofToString(values.tiltSpeed)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 		}
 	}
 	else if(name.compare("PonSide Speed") == 0) {
 		if(bSerialInited) {
 			// TODO: change output min/max to prevent reaching limits
-			int speedV = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
-			string msg = "SPEED PONSIDE "+ofToString(speedV)+";";
+			values.sideSpeed = (int)ofMap(((ofxUISlider *)args.widget)->getScaledValue(), 0,1, 0,255);
+			string msg = "SPEED PONSIDE "+ofToString(values.sideSpeed)+";";
 			mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 		}
 	}
