@@ -42,8 +42,7 @@ mGui(p.x,p.y,0,0) {
 	mGui.addSpacer(10*tDim,5);
 
 	////// 2D Pad for Pan/Tilt
-	m2DPad = (ofxUI2DPad*) mGui.addWidgetDown(new ofxUI2DPad("Pan/Tilt", ofPoint(0,1), ofPoint(0,1), ofPoint(0.5,0.5),
-									  10*tDim, 10*tDim));
+	m2DPad = (ofxUI2DPad*) mGui.addWidgetDown(new ofxUI2DPad("Pan/Tilt", ofPoint(0,1), ofPoint(0,1), ofPoint(0.5,0.5),10*tDim,5*tDim));
 	////// Motor speeds
 	mPanSpeed = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Pan Speed", 0,1, 0.5,10*tDim,tDim));
 	mTiltSpeed = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Tilt Speed", 0,1, 0.5,10*tDim,tDim));
