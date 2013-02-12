@@ -104,12 +104,10 @@ void MyKeeponControlPanel::update(){
 		if((mDanceValues.pan.enabled) && (bOnTheBeat || mDanceValues.pan.doubled)) {
 			// magick to figure out position
 			if((bOnTheBeat&&(mDanceValues.pan.doubled||mDanceValues.beatPos)) ^ mDanceValues.pan.reversed) {
-				// TODO: set mValues.pan=center-foo
-				cout << "pan POS0\n";
+				mValues.pan = mDanceValues.panCenter - 0.11;
 			}
 			else {
-				// TODO: set mValues.pan=center+foo
-				cout << "pan POS1\n";
+				mValues.pan = mDanceValues.panCenter + 0.11;
 			}
 		}
 
@@ -117,12 +115,10 @@ void MyKeeponControlPanel::update(){
 		if((mDanceValues.tilt.enabled) && (bOnTheBeat || mDanceValues.tilt.doubled)) {
 			// magick to figure out position
 			if((bOnTheBeat&&(mDanceValues.tilt.doubled||mDanceValues.beatPos)) ^ mDanceValues.tilt.reversed) {
-				// TODO: set mValues.tilt=center-foo
-				cout << "tilt POS0\n";
+				mValues.tilt = mDanceValues.tiltCenter - 0.4;
 			}
 			else {
-				// TODO: set mValues.tilt=center+foo
-				cout << "tilt POS1\n";
+				mValues.tilt = mDanceValues.tiltCenter + 0.4;
 			}
 		}
 
@@ -141,10 +137,10 @@ void MyKeeponControlPanel::update(){
 
 		// send values
 		if(mDanceValues.pan.enabled || mDanceValues.tilt.enabled) {
-			// TODO: sendPanAndtilt()
+			sendPanAndTilt();
 		}
 		if(mDanceValues.side.enabled) {
-			// TODO: sendSide()
+			// TODO: sendSide();
 		}
 
 		// flip beatPos on whole beats
@@ -294,28 +290,28 @@ const ofRectangle MyKeeponControlPanel::getRectangle() {
 //// helpers
 void MyKeeponControlPanel::sendPanAndTilt() {
 	if(bSerialInited){
-		string msg = "MOVE PAN "+ofToString((int)ofMap(mValues.pan, 0,1, -90,90))+";";
+		string msg = "MOVE PAN "+ofToString((int)ofMap(mValues.pan, 0,1, -90,90, true))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
-		msg = "MOVE TILT "+ofToString((int)ofMap(mValues.tilt, 0,1, -90,90))+";";
+		msg = "MOVE TILT "+ofToString((int)ofMap(mValues.tilt, 0,1, -90,90, true))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 	}
 }
 void MyKeeponControlPanel::sendPanSpeed() {
 	if(bSerialInited) {
-		string msg = "SPEED PAN "+ofToString((int)ofMap(mValues.panSpeed, 0,1, 64,250))+";";
+		string msg = "SPEED PAN "+ofToString((int)ofMap(mValues.panSpeed, 0,1, 64,250, true))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 	}
 }
 void MyKeeponControlPanel::sendTiltSpeed() {
 	if(bSerialInited) {
-		string msg = "SPEED TILT "+ofToString((int)ofMap(mValues.tiltSpeed, 0,1, 64,250))+";";
+		string msg = "SPEED TILT "+ofToString((int)ofMap(mValues.tiltSpeed, 0,1, 64,250, true))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 	}
 }
 void MyKeeponControlPanel::sendSideSpeed() {
 	if(bSerialInited) {
 		// TODO: change output min/max to prevent reaching limits
-		string msg = "SPEED PONSIDE "+ofToString((int)ofMap(mValues.sideSpeed, 0,1, 0,255))+";";
+		string msg = "SPEED PONSIDE "+ofToString((int)ofMap(mValues.sideSpeed, 0,1, 0,255, true))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 	}
 }
