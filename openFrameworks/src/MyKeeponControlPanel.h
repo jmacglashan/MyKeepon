@@ -17,12 +17,19 @@ class MyKeeponControlPanel{
 			float pan = 0.5, tilt = 0.5;
 			float panSpeed = 0.5, tiltSpeed = 0.5, sideSpeed = 0.5;
 		};
+		struct DanceValues {
+			bool pan[3] = {false,false,false};
+			bool tilt[3] = {false,false,false};
+			bool side[3] = {false,false,false};
+			float speed = 0.5;
+		};
 	private:
 		// GUI handlers
 		ofxUICanvas mGui;
 		ofxUIDropDownList* mSerialList;
 		ofxUI2DPad* m2DPad;
-		ofxUISlider* mPanSlider, *mTiltSlider, *mSideSlider;
+		ofxUISlider *mPanSpeed, *mTiltSpeed, *mSideSpeed;
+		ofxUIToggleMatrix *mPanDance, *mTiltDance, *mSideDance;
 		// Serial
 		ofSerial mSerial;
 		// bools
@@ -33,10 +40,13 @@ class MyKeeponControlPanel{
 		void sendPanSpeed();
 		void sendTiltSpeed();
 		void sendSideSpeed();
+		// dance state variables
+		DanceValues mDanceValues;
 		// statics
 		static vector<string> theSerials;
 		static vector<string>& updateSerialList();
 		static Values syncValues;
+		static DanceValues syncDanceValues;
 		static set<MyKeeponControlPanel*> theSyncPanels;
 		static void sendSyncPanAndTilt();
 		static void sendSyncPanSpeed();

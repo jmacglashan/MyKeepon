@@ -16,6 +16,8 @@ vector<string>& MyKeeponControlPanel::updateSerialList(){
 }
 
 MyKeeponControlPanel::Values MyKeeponControlPanel::syncValues = Values();
+MyKeeponControlPanel::DanceValues MyKeeponControlPanel::syncDanceValues = DanceValues();
+
 set<MyKeeponControlPanel*> MyKeeponControlPanel::theSyncPanels = set<MyKeeponControlPanel*>();
 
 MyKeeponControlPanel::MyKeeponControlPanel(const ofVec2f p):
@@ -25,6 +27,9 @@ mGui(p.x,p.y,0,0) {
 	bUpdateSerialList = true;
 	bIsSync = false;
 	bUpdateGuiFromValues = false;
+	
+	// temporary common dimensions variable
+	float tDim = 0;
 
 	//////////////// my GUI
 	mGui.setFont("verdana.ttf");
@@ -33,20 +38,27 @@ mGui(p.x,p.y,0,0) {
 	////// Serial Port list
 	mSerialList = (ofxUIDropDownList*) mGui.addWidgetDown(new ofxUIDropDownList("Serial List", updateSerialList()));
 	mSerialList->setAutoClose(true);
-	mGui.addSpacer(10*mSerialList->getRect()->height,5);
+	tDim = mSerialList->getRect()->height;
+	mGui.addSpacer(10*tDim,5);
+
 	////// 2D Pad for Pan/Tilt
 	m2DPad = (ofxUI2DPad*) mGui.addWidgetDown(new ofxUI2DPad("Pan/Tilt", ofPoint(0,1), ofPoint(0,1), ofPoint(0.5,0.5),
-									  10*mSerialList->getRect()->height, 10*mSerialList->getRect()->height));
+									  10*tDim, 10*tDim));
 	////// Motor speeds
-	mPanSlider = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Pan Speed", 0,1, 0.5,10*mSerialList->getRect()->height,mSerialList->getRect()->height));
-	mTiltSlider = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Tilt Speed", 0,1, 0.5,10*mSerialList->getRect()->height,mSerialList->getRect()->height));
-	mSideSlider = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("PonSide Speed", 0,1, 0.5,10*mSerialList->getRect()->height,mSerialList->getRect()->height));
+	mPanSpeed = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Pan Speed", 0,1, 0.5,10*tDim,tDim));
+	mTiltSpeed = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Tilt Speed", 0,1, 0.5,10*tDim,tDim));
+	mSideSpeed = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("PonSide Speed", 0,1, 0.5,10*tDim,tDim));
 	// synch button
-	mGui.addWidgetDown(new ofxUIToggle("Synchronize",false,mSerialList->getRect()->height,mSerialList->getRect()->height,0,0,OFX_UI_FONT_MEDIUM));
-	mGui.addSpacer(10*mSerialList->getRect()->height,5);
-	////// Dance interface
+	mGui.addWidgetDown(new ofxUIToggle("Synchronize",false,tDim,tDim,0,0,OFX_UI_FONT_MEDIUM));
+	mGui.addSpacer(10*tDim,5);
 
-	mGui.addSpacer(10*mSerialList->getRect()->height,5);
+	////// Dance interface
+	mGui.addWidgetDown(new ofxUILabel("enable double reverse", OFX_UI_FONT_MEDIUM));
+	mPanDance = (ofxUIToggleMatrix*) mGui.addWidgetDown(new ofxUIToggleMatrix(3*tDim, tDim, 1, 3, "Pan Dance"));
+	mTiltDance = (ofxUIToggleMatrix*) mGui.addWidgetDown(new ofxUIToggleMatrix(3*tDim, tDim, 1, 3, "Tilt Dance"));
+	mSideDance = (ofxUIToggleMatrix*) mGui.addWidgetDown(new ofxUIToggleMatrix(3*tDim, tDim, 1, 3, "Side Dance"));
+	mGui.addSpacer(10*tDim,5);
+
 	// remove button
 	mGui.addWidgetDown(new ofxUILabelButton("Remove", false));
 
@@ -78,9 +90,9 @@ void MyKeeponControlPanel::update(){
 	// check if we have to update due to sync
 	if(bUpdateGuiFromValues){
 		m2DPad->setValue(ofPoint(mValues.pan,mValues.tilt));
-		mPanSlider->setValue(mValues.panSpeed);
-		mTiltSlider->setValue(mValues.tiltSpeed);
-		mSideSlider->setValue(mValues.sideSpeed);
+		mPanSpeed->setValue(mValues.panSpeed);
+		mTiltSpeed->setValue(mValues.tiltSpeed);
+		mSideSpeed->setValue(mValues.sideSpeed);
 		bUpdateGuiFromValues = false;
 	}
 	// TODO: set up timers and stuff to send signals to serial port
