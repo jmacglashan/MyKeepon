@@ -14,7 +14,7 @@ class MyKeeponControlPanel{
 		void setX(const int x_);
 		const ofRectangle getRectangle();
 		struct Values {
-			float pan = 0.5, tilt = 0.5;
+			float pan = 0.5, tilt = 0.5, side=0;
 			float panSpeed = 0.5, tiltSpeed = 0.5, sideSpeed = 0.5;
 		};
 		struct DanceValues {
@@ -40,6 +40,7 @@ class MyKeeponControlPanel{
 		Values mValues;
 		// helpers
 		void sendPanAndTilt();
+		void sendSide();
 		void sendPanSpeed();
 		void sendTiltSpeed();
 		void sendSideSpeed();

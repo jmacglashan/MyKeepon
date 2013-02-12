@@ -125,13 +125,11 @@ void MyKeeponControlPanel::update(){
 		// side dance: enabled && (on the beat or double-time)
 		if((mDanceValues.side.enabled) && (bOnTheBeat || mDanceValues.side.doubled)) {
 			// magick to figure out position
-			if((bOnTheBeat&&(mDanceValues.side.doubled||mDanceValues.beatPos)) ^ mDanceValues.side.reversed) {
-				// TODO: set mValues.side=center-foo
-				cout << "sideP POS0\n";
+			if(bOnTheBeat&&(mDanceValues.side.doubled||mDanceValues.beatPos)) {
+				mValues.side = 1 + mDanceValues.side.reversed;
 			}
 			else {
-				// TODO: set mValues.side=center+foo
-				cout << "sideP POS1\n";
+				mValues.side = -(1 + mDanceValues.side.reversed);
 			}
 		}
 
@@ -140,7 +138,7 @@ void MyKeeponControlPanel::update(){
 			sendPanAndTilt();
 		}
 		if(mDanceValues.side.enabled) {
-			// TODO: sendSide();
+			sendSide();
 		}
 
 		// flip beatPos on whole beats
@@ -293,6 +291,30 @@ void MyKeeponControlPanel::sendPanAndTilt() {
 		string msg = "MOVE PAN "+ofToString((int)ofMap(mValues.pan, 0,1, -90,90, true))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 		msg = "MOVE TILT "+ofToString((int)ofMap(mValues.tilt, 0,1, -90,90, true))+";";
+		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
+	}
+}
+void MyKeeponControlPanel::sendSide() {
+	if(bSerialInited){
+		string msg;
+		switch((int)mValues.side) {
+			case -1: {
+				msg = "MOVE SIDE LEFT;";
+				break;
+			}
+			case 1: {
+				msg = "MOVE SIDE RIGHT;";
+				break;
+			}
+			case -2: {
+				msg = "MOVE PON DOWN;";
+				break;
+			}
+			case 2: {
+				msg = "MOVE PON UP;";
+				break;
+			}
+		}
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 	}
 }
