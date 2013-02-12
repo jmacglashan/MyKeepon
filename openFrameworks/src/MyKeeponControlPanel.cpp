@@ -15,7 +15,7 @@ vector<string>& MyKeeponControlPanel::updateSerialList(){
 	return theSerials;
 }
 
-MyKeeponControlPanel::V MyKeeponControlPanel::syncValues = V();
+MyKeeponControlPanel::Values MyKeeponControlPanel::syncValues = Values();
 set<MyKeeponControlPanel*> MyKeeponControlPanel::theSyncPanels = set<MyKeeponControlPanel*>();
 
 MyKeeponControlPanel::MyKeeponControlPanel(const ofVec2f p):
@@ -33,6 +33,7 @@ mGui(p.x,p.y,0,0) {
 	////// Serial Port list
 	mSerialList = (ofxUIDropDownList*) mGui.addWidgetDown(new ofxUIDropDownList("Serial List", updateSerialList()));
 	mSerialList->setAutoClose(true);
+	mGui.addSpacer(10*mSerialList->getRect()->height,5);
 	////// 2D Pad for Pan/Tilt
 	m2DPad = (ofxUI2DPad*) mGui.addWidgetDown(new ofxUI2DPad("Pan/Tilt", ofPoint(0,1), ofPoint(0,1), ofPoint(0.5,0.5),
 									  10*mSerialList->getRect()->height, 10*mSerialList->getRect()->height));
@@ -40,9 +41,12 @@ mGui(p.x,p.y,0,0) {
 	mPanSlider = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Pan Speed", 0,1, 0.5,10*mSerialList->getRect()->height,mSerialList->getRect()->height));
 	mTiltSlider = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Tilt Speed", 0,1, 0.5,10*mSerialList->getRect()->height,mSerialList->getRect()->height));
 	mSideSlider = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("PonSide Speed", 0,1, 0.5,10*mSerialList->getRect()->height,mSerialList->getRect()->height));
-
 	// synch button
 	mGui.addWidgetDown(new ofxUIToggle("Synchronize",false,mSerialList->getRect()->height,mSerialList->getRect()->height,0,0,OFX_UI_FONT_MEDIUM));
+	mGui.addSpacer(10*mSerialList->getRect()->height,5);
+	////// Dance interface
+
+	mGui.addSpacer(10*mSerialList->getRect()->height,5);
 	// remove button
 	mGui.addWidgetDown(new ofxUILabelButton("Remove", false));
 
@@ -73,10 +77,10 @@ void MyKeeponControlPanel::update(){
 	
 	// check if we have to update due to sync
 	if(bUpdateGuiFromValues){
-		m2DPad->setValue(ofPoint(values.pan,values.tilt));
-		mPanSlider->setValue(values.panSpeed);
-		mTiltSlider->setValue(values.tiltSpeed);
-		mSideSlider->setValue(values.sideSpeed);
+		m2DPad->setValue(ofPoint(mValues.pan,mValues.tilt));
+		mPanSlider->setValue(mValues.panSpeed);
+		mTiltSlider->setValue(mValues.tiltSpeed);
+		mSideSlider->setValue(mValues.sideSpeed);
 		bUpdateGuiFromValues = false;
 	}
 	// TODO: set up timers and stuff to send signals to serial port
@@ -105,43 +109,43 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	}
 	// immediate-mode stuff
 	else if(name.compare("Pan/Tilt") == 0) {
-		values.pan = ((ofxUI2DPad *)args.widget)->getScaledValue().x;
-		values.tilt = ((ofxUI2DPad *)args.widget)->getScaledValue().y;
+		mValues.pan = ((ofxUI2DPad *)args.widget)->getScaledValue().x;
+		mValues.tilt = ((ofxUI2DPad *)args.widget)->getScaledValue().y;
 		if(!bIsSync) {
 			sendPanAndTilt();
 		}
 		else {
-			syncValues = values;
+			syncValues = mValues;
 			sendSyncPanAndTilt();
 		}
 	}
 	else if(name.compare("Pan Speed") == 0) {
-		values.panSpeed = ((ofxUISlider *)args.widget)->getScaledValue();
+		mValues.panSpeed = ((ofxUISlider *)args.widget)->getScaledValue();
 		if(!bIsSync) {
 			sendPanSpeed();
 		}
 		else {
-			syncValues = values;
+			syncValues = mValues;
 			sendSyncPanSpeed();
 		}
 	}
 	else if(name.compare("Tilt Speed") == 0) {
-		values.tiltSpeed = ((ofxUISlider *)args.widget)->getScaledValue();
+		mValues.tiltSpeed = ((ofxUISlider *)args.widget)->getScaledValue();
 		if(!bIsSync) {
 			sendTiltSpeed();
 		}
 		else {
-			syncValues = values;
+			syncValues = mValues;
 			sendSyncTiltSpeed();
 		}
 	}
 	else if(name.compare("PonSide Speed") == 0) {
-		values.sideSpeed = ((ofxUISlider *)args.widget)->getScaledValue();
+		mValues.sideSpeed = ((ofxUISlider *)args.widget)->getScaledValue();
 		if(!bIsSync) {
 			sendSideSpeed();
 		}
 		else {
-			syncValues = values;
+			syncValues = mValues;
 			sendSyncSideSpeed();
 		}
 	}
@@ -151,10 +155,10 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 		if(bIsSync) {
 			// if first item, copy to syncValue
 			if(theSyncPanels.size() < 1){
-				syncValues = values;
+				syncValues = mValues;
 			}
 			else{
-				values = syncValues;
+				mValues = syncValues;
 				bUpdateGuiFromValues = true;
 			}
 			// add to set of sync panels
@@ -185,28 +189,28 @@ const ofRectangle MyKeeponControlPanel::getRectangle() {
 //// helpers
 void MyKeeponControlPanel::sendPanAndTilt() {
 	if(bSerialInited){
-		string msg = "MOVE PAN "+ofToString((int)ofMap(values.pan, 0,1, -90,90))+";";
+		string msg = "MOVE PAN "+ofToString((int)ofMap(mValues.pan, 0,1, -90,90))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
-		msg = "MOVE TILT "+ofToString((int)ofMap(values.tilt, 0,1, -90,90))+";";
+		msg = "MOVE TILT "+ofToString((int)ofMap(mValues.tilt, 0,1, -90,90))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 	}
 }
 void MyKeeponControlPanel::sendPanSpeed() {
 	if(bSerialInited) {
-		string msg = "SPEED PAN "+ofToString((int)ofMap(values.panSpeed, 0,1, 64,250))+";";
+		string msg = "SPEED PAN "+ofToString((int)ofMap(mValues.panSpeed, 0,1, 64,250))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 	}
 }
 void MyKeeponControlPanel::sendTiltSpeed() {
 	if(bSerialInited) {
-		string msg = "SPEED TILT "+ofToString((int)ofMap(values.tiltSpeed, 0,1, 64,250))+";";
+		string msg = "SPEED TILT "+ofToString((int)ofMap(mValues.tiltSpeed, 0,1, 64,250))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 	}
 }
 void MyKeeponControlPanel::sendSideSpeed() {
 	if(bSerialInited) {
 		// TODO: change output min/max to prevent reaching limits
-		string msg = "SPEED PONSIDE "+ofToString((int)ofMap(values.sideSpeed, 0,1, 0,255))+";";
+		string msg = "SPEED PONSIDE "+ofToString((int)ofMap(mValues.sideSpeed, 0,1, 0,255))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 	}
 }
@@ -214,28 +218,28 @@ void MyKeeponControlPanel::sendSideSpeed() {
 //// static helpers
 void MyKeeponControlPanel::sendSyncPanAndTilt() {
 	for(set<MyKeeponControlPanel*>::const_iterator it=theSyncPanels.begin(); it!=theSyncPanels.end(); ++it){
-		(*it)->values = syncValues;
+		(*it)->mValues = syncValues;
 		(*it)->sendPanAndTilt();
 		(*it)->bUpdateGuiFromValues = true;
 	}
 }
 void MyKeeponControlPanel::sendSyncPanSpeed() {
 	for(set<MyKeeponControlPanel*>::const_iterator it=theSyncPanels.begin(); it!=theSyncPanels.end(); ++it){
-		(*it)->values = syncValues;
+		(*it)->mValues = syncValues;
 		(*it)->sendPanSpeed();
 		(*it)->bUpdateGuiFromValues = true;
 	}
 }
 void MyKeeponControlPanel::sendSyncTiltSpeed() {
 	for(set<MyKeeponControlPanel*>::const_iterator it=theSyncPanels.begin(); it!=theSyncPanels.end(); ++it){
-		(*it)->values = syncValues;
+		(*it)->mValues = syncValues;
 		(*it)->sendTiltSpeed();
 		(*it)->bUpdateGuiFromValues = true;
 	}
 }
 void MyKeeponControlPanel::sendSyncSideSpeed() {
 	for(set<MyKeeponControlPanel*>::const_iterator it=theSyncPanels.begin(); it!=theSyncPanels.end(); ++it){
-		(*it)->values = syncValues;
+		(*it)->mValues = syncValues;
 		(*it)->sendSideSpeed();
 		(*it)->bUpdateGuiFromValues = true;
 	}

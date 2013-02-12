@@ -13,7 +13,7 @@ class MyKeeponControlPanel{
 		const bool& toDelete() const;
 		void setX(const int x_);
 		const ofRectangle getRectangle();
-		struct V {
+		struct Values {
 			float pan = 0.5, tilt = 0.5;
 			float panSpeed = 0.5, tiltSpeed = 0.5, sideSpeed = 0.5;
 		};
@@ -27,7 +27,7 @@ class MyKeeponControlPanel{
 		ofSerial mSerial;
 		// bools
 		bool bDelete, bUpdateSerialList, bSerialInited, bIsSync, bUpdateGuiFromValues;
-		V values;
+		Values mValues;
 		// helpers
 		void sendPanAndTilt();
 		void sendPanSpeed();
@@ -36,11 +36,10 @@ class MyKeeponControlPanel{
 		// statics
 		static vector<string> theSerials;
 		static vector<string>& updateSerialList();
-		static V syncValues;
+		static Values syncValues;
 		static set<MyKeeponControlPanel*> theSyncPanels;
 		static void sendSyncPanAndTilt();
 		static void sendSyncPanSpeed();
 		static void sendSyncTiltSpeed();
 		static void sendSyncSideSpeed();
-		// put the dance state stuff here too
 };
