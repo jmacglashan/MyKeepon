@@ -18,10 +18,13 @@ class MyKeeponControlPanel{
 			float panSpeed = 0.5, tiltSpeed = 0.5, sideSpeed = 0.5;
 		};
 		struct DanceValues {
-			bool pan[3] = {false,false,false};
-			bool tilt[3] = {false,false,false};
-			bool side[3] = {false,false,false};
-			float speed = 0.5;
+			struct DanceArray {
+				bool enabled=false, doubled=false, reversed=false;
+			};
+			DanceArray pan, tilt, side;
+			bool beatPos = false;
+			float tempo = 0.5;
+			float panCenter = 0.5, tiltCenter = 0.5;
 		};
 	private:
 		// GUI handlers
@@ -42,6 +45,7 @@ class MyKeeponControlPanel{
 		void sendSideSpeed();
 		// dance state variables
 		DanceValues mDanceValues;
+		unsigned long long lastHalfBeat;
 		// statics
 		static vector<string> theSerials;
 		static vector<string>& updateSerialList();

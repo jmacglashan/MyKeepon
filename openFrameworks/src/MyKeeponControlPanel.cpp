@@ -27,7 +27,7 @@ mGui(p.x,p.y,0,0) {
 	bUpdateSerialList = true;
 	bIsSync = false;
 	bUpdateGuiFromValues = false;
-	
+	lastHalfBeat = ofGetElapsedTimeMillis();
 	// temporary common dimensions variable
 	float tDim = 0;
 
@@ -55,7 +55,7 @@ mGui(p.x,p.y,0,0) {
 	mGui.addWidgetDown(new ofxUILabel("enable double reverse", OFX_UI_FONT_MEDIUM));
 	mPanDance = (ofxUIToggleMatrix*) mGui.addWidgetDown(new ofxUIToggleMatrix(3*tDim, tDim, 1, 3, "Pan Dance"));
 	mTiltDance = (ofxUIToggleMatrix*) mGui.addWidgetDown(new ofxUIToggleMatrix(3*tDim, tDim, 1, 3, "Tilt Dance"));
-	mSideDance = (ofxUIToggleMatrix*) mGui.addWidgetDown(new ofxUIToggleMatrix(3*tDim, tDim, 1, 3, "Side Dance"));
+	mSideDance = (ofxUIToggleMatrix*) mGui.addWidgetDown(new ofxUIToggleMatrix(3*tDim, tDim, 1, 3, "PonSide Dance"));
 	mGui.addSpacer(10*tDim,5);
 
 	// remove button
@@ -95,6 +95,62 @@ void MyKeeponControlPanel::update(){
 		bUpdateGuiFromValues = false;
 	}
 	// TODO: set up timers and stuff to send signals to serial port
+	unsigned long long tBeat = ofMap(mDanceValues.tempo,0,1, 1000, 500);
+	if(ofGetElapsedTimeMillis()-lastHalfBeat > tBeat/2) {
+		// whether this is the beat or the half-beat
+		bool bOnTheBeat = (ofGetElapsedTimeMillis()%tBeat) < (tBeat/2);
+
+		// pan dance: enabled && (on the beat or double-time)
+		if((mDanceValues.pan.enabled) && (bOnTheBeat || mDanceValues.pan.doubled)) {
+			// magick to figure out position
+			if((bOnTheBeat&&(mDanceValues.pan.doubled||mDanceValues.beatPos)) ^ mDanceValues.pan.reversed) {
+				// TODO: set mValues.pan=center-foo
+				cout << "pan POS0\n";
+			}
+			else {
+				// TODO: set mValues.pan=center+foo
+				cout << "pan POS1\n";
+			}
+		}
+
+		// tilt dance: enabled && (on the beat or double-time)
+		if((mDanceValues.tilt.enabled) && (bOnTheBeat || mDanceValues.tilt.doubled)) {
+			// magick to figure out position
+			if((bOnTheBeat&&(mDanceValues.tilt.doubled||mDanceValues.beatPos)) ^ mDanceValues.tilt.reversed) {
+				// TODO: set mValues.tilt=center-foo
+				cout << "tilt POS0\n";
+			}
+			else {
+				// TODO: set mValues.tilt=center+foo
+				cout << "tilt POS1\n";
+			}
+		}
+
+		// side dance: enabled && (on the beat or double-time)
+		if((mDanceValues.side.enabled) && (bOnTheBeat || mDanceValues.side.doubled)) {
+			// magick to figure out position
+			if((bOnTheBeat&&(mDanceValues.side.doubled||mDanceValues.beatPos)) ^ mDanceValues.side.reversed) {
+				// TODO: set mValues.side=center-foo
+				cout << "sideP POS0\n";
+			}
+			else {
+				// TODO: set mValues.side=center+foo
+				cout << "sideP POS1\n";
+			}
+		}
+
+		// send values
+		if(mDanceValues.pan.enabled || mDanceValues.tilt.enabled) {
+			// TODO: sendPanAndtilt()
+		}
+		if(mDanceValues.side.enabled) {
+			// TODO: sendSide()
+		}
+
+		// flip beatPos on whole beats
+		mDanceValues.beatPos ^= bOnTheBeat;
+		lastHalfBeat = ofGetElapsedTimeMillis();
+	}
 }
 
 void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
@@ -160,6 +216,37 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 			sendSyncSideSpeed();
 		}
 	}
+	// Dance
+	else if(name.compare("Pan Dance(0,0)") == 0) {
+		mDanceValues.pan.enabled = !mDanceValues.pan.enabled;
+	}
+	else if(name.compare("Pan Dance(0,1)") == 0) {
+		mDanceValues.pan.doubled = !mDanceValues.pan.doubled;
+	}
+	else if(name.compare("Pan Dance(0,2)") == 0) {
+		mDanceValues.pan.reversed = !mDanceValues.pan.reversed;
+	}
+
+	else if(name.compare("Tilt Dance(0,0)") == 0) {
+		mDanceValues.tilt.enabled = !mDanceValues.tilt.enabled;
+	}
+	else if(name.compare("Tilt Dance(0,1)") == 0) {
+		mDanceValues.tilt.doubled = !mDanceValues.tilt.doubled;
+	}
+	else if(name.compare("Tilt Dance(0,2)") == 0) {
+		mDanceValues.tilt.reversed = !mDanceValues.tilt.reversed;
+	}
+
+	else if(name.compare("PonSide Dance(0,0)") == 0) {
+		mDanceValues.side.enabled = !mDanceValues.side.enabled;
+	}
+	else if(name.compare("PonSide Dance(0,1)") == 0) {
+		mDanceValues.side.doubled = !mDanceValues.side.doubled;
+	}
+	else if(name.compare("PonSide Dance(0,2)") == 0) {
+		mDanceValues.side.reversed = !mDanceValues.side.reversed;
+	}
+
 	// management stuff
 	else if(name.compare("Synchronize") == 0){
 		bIsSync = ((ofxUIButton*)args.widget)->getValue();
