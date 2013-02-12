@@ -125,20 +125,32 @@ void MyKeeponControlPanel::update(){
 		// side dance: enabled && (on the beat or double-time)
 		if((mDanceValues.side.enabled) && (bOnTheBeat || mDanceValues.side.doubled)) {
 			// magick to figure out position
+			// mDanceValues.side.reversed selects between pon and side
+			//    on pon, only move on beat
+			if((mDanceValues.side.reversed) && bOnTheBeat) {
+				if(mDanceValues.side.doubled) {
+					mValues.side = -2;
+					sendSide();
+				}
+				else if(mDanceValues.beatPos) {
+					mValues.side = -2;
+					sendSide();
+				}
+			}
+
+			/*
 			if(bOnTheBeat&&(mDanceValues.side.doubled||mDanceValues.beatPos)) {
 				mValues.side = 1 + mDanceValues.side.reversed;
 			}
 			else {
 				mValues.side = -(1 + mDanceValues.side.reversed);
 			}
+			 */
 		}
 
 		// send values
 		if(mDanceValues.pan.enabled || mDanceValues.tilt.enabled) {
 			sendPanAndTilt();
-		}
-		if(mDanceValues.side.enabled) {
-			sendSide();
 		}
 
 		// flip beatPos on whole beats
@@ -217,6 +229,10 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	// Dance
 	else if(name.compare("Pan Dance(0,0)") == 0) {
 		mDanceValues.pan.enabled = !mDanceValues.pan.enabled;
+		if(!mDanceValues.pan.enabled) {
+			mValues.pan = mDanceValues.panCenter;
+			sendPanAndTilt();
+		}
 	}
 	else if(name.compare("Pan Dance(0,1)") == 0) {
 		mDanceValues.pan.doubled = !mDanceValues.pan.doubled;
@@ -227,6 +243,10 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 
 	else if(name.compare("Tilt Dance(0,0)") == 0) {
 		mDanceValues.tilt.enabled = !mDanceValues.tilt.enabled;
+		if(!mDanceValues.tilt.enabled) {
+			mValues.tilt = mDanceValues.tiltCenter;
+			sendPanAndTilt();
+		}
 	}
 	else if(name.compare("Tilt Dance(0,1)") == 0) {
 		mDanceValues.tilt.doubled = !mDanceValues.tilt.doubled;
@@ -237,6 +257,10 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 
 	else if(name.compare("PonSide Dance(0,0)") == 0) {
 		mDanceValues.side.enabled = !mDanceValues.side.enabled;
+		if(!mDanceValues.side.enabled) {
+			mValues.side = 0;
+			sendSide();
+		}
 	}
 	else if(name.compare("PonSide Dance(0,1)") == 0) {
 		mDanceValues.side.doubled = !mDanceValues.side.doubled;
@@ -307,12 +331,15 @@ void MyKeeponControlPanel::sendSide() {
 				break;
 			}
 			case -2: {
-				msg = "MOVE PON DOWN;";
+				msg = "MOVE PON HALFDOWN;";
 				break;
 			}
-			case 2: {
+			default: {
 				msg = "MOVE PON UP;";
-				break;
+				/*
+				mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
+				msg = "MOVE SIDE CENTERFROMLEFT;";
+				 */
 			}
 		}
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
