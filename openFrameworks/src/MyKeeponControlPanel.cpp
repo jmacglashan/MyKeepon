@@ -178,6 +178,10 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	else if(name.compare("Pan/Tilt") == 0) {
 		mValues.pan = ((ofxUI2DPad *)args.widget)->getScaledValue().x;
 		mValues.tilt = ((ofxUI2DPad *)args.widget)->getScaledValue().y;
+		// keep dance values up-to-date
+		mDanceValues.panCenter = mValues.pan;
+		mDanceValues.tiltCenter = mValues.tilt;
+
 		if(!bIsSync) {
 			sendPanAndTilt();
 		}
@@ -257,6 +261,9 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 			}
 			else{
 				mValues = syncValues;
+				// keep dance values up-to-date
+				mDanceValues.panCenter = mValues.pan;
+				mDanceValues.tiltCenter = mValues.tilt;
 				bUpdateGuiFromValues = true;
 			}
 			// add to set of sync panels
