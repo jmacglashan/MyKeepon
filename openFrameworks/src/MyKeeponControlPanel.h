@@ -13,7 +13,7 @@ class MyKeeponControlPanel{
 		const bool& toDelete() const;
 		void setX(const int x_);
 		const ofRectangle getRectangle();
-		struct Values {
+		struct GazeValues {
 			float pan = 0.5, tilt = 0.5, side=0;
 			float panSpeed = 0.5, tiltSpeed = 0.5, sideSpeed = 0.5;
 		};
@@ -31,13 +31,13 @@ class MyKeeponControlPanel{
 		ofxUICanvas mGui;
 		ofxUIDropDownList* mSerialList;
 		ofxUI2DPad* m2DPad;
-		ofxUISlider *mPanSpeed, *mTiltSpeed, *mSideSpeed;
+		ofxUISlider *mPanSpeed, *mTiltSpeed, *mSideSpeed, *mDanceTempo;
 		ofxUIToggleMatrix *mPanDance, *mTiltDance, *mSideDance;
 		// Serial
 		ofSerial mSerial;
 		// bools
-		bool bDelete, bUpdateSerialList, bSerialInited, bIsSync, bUpdateGuiFromValues;
-		Values mValues;
+		bool bDelete, bUpdateSerialList, bSerialInited, bIsGazeSync, bUpdateGuiFromValues;
+		GazeValues mGazeValues;
 		// helpers
 		void sendPanAndTilt();
 		void sendSide();
@@ -50,9 +50,9 @@ class MyKeeponControlPanel{
 		// statics
 		static vector<string> theSerials;
 		static vector<string>& updateSerialList();
-		static Values syncValues;
+		static GazeValues syncGazeValues;
 		static DanceValues syncDanceValues;
-		static set<MyKeeponControlPanel*> theSyncPanels;
+		static set<MyKeeponControlPanel*> theSyncGazePanels;
 		static void sendSyncPanAndTilt();
 		static void sendSyncPanSpeed();
 		static void sendSyncTiltSpeed();
