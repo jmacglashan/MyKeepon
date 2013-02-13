@@ -100,9 +100,21 @@ void MyKeeponControlPanel::update(){
 		mSideSpeed->setValue(mGazeValues.sideSpeed);
 		bUpdateGazeGuiFromValues = false;
 	}
-
 	if(bUpdateDanceGuiFromValues) {
 		mTempoDance->setValue(mDanceValues.tempo);
+
+		mPanDance->setToggle(0, 0, mDanceValues.pan.enabled);
+		mPanDance->setToggle(0, 1, mDanceValues.pan.doubled);
+		mPanDance->setToggle(0, 2, mDanceValues.pan.reversed);
+		//
+		mTiltDance->setToggle(0, 0, mDanceValues.tilt.enabled);
+		mTiltDance->setToggle(0, 1, mDanceValues.tilt.doubled);
+		mTiltDance->setToggle(0, 2, mDanceValues.tilt.reversed);
+		//
+		mSideDance->setToggle(0, 0, mDanceValues.side.enabled);
+		mSideDance->setToggle(0, 1, mDanceValues.side.doubled);
+		mSideDance->setToggle(0, 2, mDanceValues.side.reversed);
+
 		bUpdateDanceGuiFromValues = false;
 	}
 
@@ -234,58 +246,7 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 			sendSyncSideSpeed();
 		}
 	}
-	// Dance
-	else if(name.compare("Pan Dance(0,0)") == 0) {
-		mDanceValues.pan.enabled = !mDanceValues.pan.enabled;
-		if(!mDanceValues.pan.enabled) {
-			mGazeValues.pan = mDanceValues.panCenter;
-			sendPanAndTilt();
-		}
-	}
-	else if(name.compare("Pan Dance(0,1)") == 0) {
-		mDanceValues.pan.doubled = !mDanceValues.pan.doubled;
-	}
-	else if(name.compare("Pan Dance(0,2)") == 0) {
-		mDanceValues.pan.reversed = !mDanceValues.pan.reversed;
-	}
 
-	else if(name.compare("Tilt Dance(0,0)") == 0) {
-		mDanceValues.tilt.enabled = !mDanceValues.tilt.enabled;
-		if(!mDanceValues.tilt.enabled) {
-			mGazeValues.tilt = mDanceValues.tiltCenter;
-			sendPanAndTilt();
-		}
-	}
-	else if(name.compare("Tilt Dance(0,1)") == 0) {
-		mDanceValues.tilt.doubled = !mDanceValues.tilt.doubled;
-	}
-	else if(name.compare("Tilt Dance(0,2)") == 0) {
-		mDanceValues.tilt.reversed = !mDanceValues.tilt.reversed;
-	}
-
-	else if(name.compare("PonSide Dance(0,0)") == 0) {
-		mDanceValues.side.enabled = !mDanceValues.side.enabled;
-		if(!mDanceValues.side.enabled) {
-			mGazeValues.side = 0;
-			sendSide();
-		}
-	}
-	else if(name.compare("PonSide Dance(0,1)") == 0) {
-		mDanceValues.side.doubled = !mDanceValues.side.doubled;
-	}
-	else if(name.compare("PonSide Dance(0,2)") == 0) {
-		mDanceValues.side.reversed = !mDanceValues.side.reversed;
-	}
-	
-	else if(name.compare("Tempo") == 0) {
-		mDanceValues.tempo = ((ofxUISlider *)args.widget)->getScaledValue();
-		if(bIsDanceSync) {
-			syncDanceValues = mDanceValues;
-			syncDance();
-		}
-	}
-
-	/////// management stuff
 	else if(name.compare("Synchronize Gaze") == 0){
 		bIsGazeSync = ((ofxUIButton*)args.widget)->getValue();
 		if(bIsGazeSync) {
@@ -308,6 +269,82 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 			theSyncGazePanels.erase(this);
 		}
 	}
+
+	//////// Dance
+	else if(name.compare("Pan Dance(0,0)") == 0) {
+		mDanceValues.pan.enabled = !mDanceValues.pan.enabled;
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			syncDance();
+		}
+	}
+	else if(name.compare("Pan Dance(0,1)") == 0) {
+		mDanceValues.pan.doubled = !mDanceValues.pan.doubled;
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			syncDance();
+		}
+	}
+	else if(name.compare("Pan Dance(0,2)") == 0) {
+		mDanceValues.pan.reversed = !mDanceValues.pan.reversed;
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			syncDance();
+		}
+	}
+
+	else if(name.compare("Tilt Dance(0,0)") == 0) {
+		mDanceValues.tilt.enabled = !mDanceValues.tilt.enabled;
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			syncDance();
+		}
+	}
+	else if(name.compare("Tilt Dance(0,1)") == 0) {
+		mDanceValues.tilt.doubled = !mDanceValues.tilt.doubled;
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			syncDance();
+		}
+	}
+	else if(name.compare("Tilt Dance(0,2)") == 0) {
+		mDanceValues.tilt.reversed = !mDanceValues.tilt.reversed;
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			syncDance();
+		}
+	}
+
+	else if(name.compare("PonSide Dance(0,0)") == 0) {
+		mDanceValues.side.enabled = !mDanceValues.side.enabled;
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			syncDance();
+		}
+	}
+	else if(name.compare("PonSide Dance(0,1)") == 0) {
+		mDanceValues.side.doubled = !mDanceValues.side.doubled;
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			syncDance();
+		}
+	}
+	else if(name.compare("PonSide Dance(0,2)") == 0) {
+		mDanceValues.side.reversed = !mDanceValues.side.reversed;
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			syncDance();
+		}
+	}
+	
+	else if(name.compare("Tempo") == 0) {
+		mDanceValues.tempo = ((ofxUISlider *)args.widget)->getScaledValue();
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			syncDance();
+		}
+	}
+
 	else if(name.compare("Synchronize Dance") == 0){
 		bIsDanceSync = ((ofxUIButton*)args.widget)->getValue();
 		if(bIsDanceSync) {
@@ -327,6 +364,8 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 			theSyncDancePanels.erase(this);
 		}
 	}
+	
+	//////// 
 	else if((name.compare("Remove") == 0) && (((ofxUIButton*)args.widget)->getValue())){
 		bDelete = true;
 	}
