@@ -31,12 +31,12 @@ class MyKeeponControlPanel{
 		ofxUICanvas mGui;
 		ofxUIDropDownList* mSerialList;
 		ofxUI2DPad* m2DPad;
-		ofxUISlider *mPanSpeed, *mTiltSpeed, *mSideSpeed, *mDanceTempo;
+		ofxUISlider *mPanSpeed, *mTiltSpeed, *mSideSpeed, *mTempoDance;
 		ofxUIToggleMatrix *mPanDance, *mTiltDance, *mSideDance;
 		// Serial
 		ofSerial mSerial;
 		// bools
-		bool bDelete, bUpdateSerialList, bSerialInited, bIsGazeSync, bUpdateGuiFromValues;
+		bool bDelete, bUpdateSerialList, bSerialInited, bIsGazeSync, bIsDanceSync, bUpdateGazeGuiFromValues, bUpdateDanceGuiFromValues;
 		GazeValues mGazeValues;
 		// helpers
 		void sendPanAndTilt();
@@ -52,7 +52,7 @@ class MyKeeponControlPanel{
 		static vector<string>& updateSerialList();
 		static GazeValues syncGazeValues;
 		static DanceValues syncDanceValues;
-		static set<MyKeeponControlPanel*> theSyncGazePanels;
+		static set<MyKeeponControlPanel*> theSyncGazePanels, theSyncDancePanels;
 		static void sendSyncPanAndTilt();
 		static void sendSyncPanSpeed();
 		static void sendSyncTiltSpeed();

@@ -19,6 +19,7 @@ MyKeeponControlPanel::GazeValues MyKeeponControlPanel::syncGazeValues = GazeValu
 MyKeeponControlPanel::DanceValues MyKeeponControlPanel::syncDanceValues = DanceValues();
 
 set<MyKeeponControlPanel*> MyKeeponControlPanel::theSyncGazePanels = set<MyKeeponControlPanel*>();
+set<MyKeeponControlPanel*> MyKeeponControlPanel::theSyncDancePanels = set<MyKeeponControlPanel*>();
 
 MyKeeponControlPanel::MyKeeponControlPanel(const ofVec2f p):
 mGui(p.x,p.y,0,0) {
@@ -26,7 +27,9 @@ mGui(p.x,p.y,0,0) {
 	bSerialInited = false;
 	bUpdateSerialList = true;
 	bIsGazeSync = false;
-	bUpdateGuiFromValues = false;
+	bIsDanceSync = false;
+	bUpdateGazeGuiFromValues = false;
+	bUpdateDanceGuiFromValues = false;
 	lastHalfBeat = ofGetElapsedTimeMillis();
 	// temporary common dimensions variable
 	float tDim = 0;
@@ -54,7 +57,7 @@ mGui(p.x,p.y,0,0) {
 	mPanDance = (ofxUIToggleMatrix*) mGui.addWidgetDown(new ofxUIToggleMatrix(3*tDim, tDim, 1, 3, "Pan Dance"));
 	mTiltDance = (ofxUIToggleMatrix*) mGui.addWidgetDown(new ofxUIToggleMatrix(3*tDim, tDim, 1, 3, "Tilt Dance"));
 	mSideDance = (ofxUIToggleMatrix*) mGui.addWidgetDown(new ofxUIToggleMatrix(3*tDim, tDim, 1, 3, "PonSide Dance"));
-	mDanceTempo = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Tempo", 0,1, 0.5,10*tDim,tDim));
+	mTempoDance = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Tempo", 0,1, 0.5,10*tDim,tDim));
 	// synch button
 	mGui.addWidgetDown(new ofxUIToggle("Synchronize Dance",false,tDim,tDim,0,0,OFX_UI_FONT_SMALL));
 
@@ -72,6 +75,7 @@ mGui(p.x,p.y,0,0) {
 MyKeeponControlPanel::~MyKeeponControlPanel(){
 	mSerial.close();
 	theSyncGazePanels.erase(this);
+	theSyncDancePanels.erase(this);
 }
 
 void MyKeeponControlPanel::update(){
@@ -89,14 +93,19 @@ void MyKeeponControlPanel::update(){
 	}
 	
 	// check if we have to update due to sync
-	if(bUpdateGuiFromValues){
+	if(bUpdateGazeGuiFromValues){
 		m2DPad->setValue(ofPoint(mGazeValues.pan,mGazeValues.tilt));
 		mPanSpeed->setValue(mGazeValues.panSpeed);
 		mTiltSpeed->setValue(mGazeValues.tiltSpeed);
 		mSideSpeed->setValue(mGazeValues.sideSpeed);
-		bUpdateGuiFromValues = false;
+		bUpdateGazeGuiFromValues = false;
 	}
-	// TODO: set up timers and stuff to send signals to serial port
+
+	if(bUpdateDanceGuiFromValues) {
+		mTempoDance->setValue(mDanceValues.tempo);
+		bUpdateDanceGuiFromValues = false;
+	}
+
 	unsigned long long tBeat = ofMap(mDanceValues.tempo,0,1, 1000, 500);
 	if(ofGetElapsedTimeMillis()-lastHalfBeat > tBeat/2) {
 		// whether this is the beat or the half-beat
@@ -267,8 +276,16 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	else if(name.compare("PonSide Dance(0,2)") == 0) {
 		mDanceValues.side.reversed = !mDanceValues.side.reversed;
 	}
+	
+	else if(name.compare("Tempo") == 0) {
+		mDanceValues.tempo = ((ofxUISlider *)args.widget)->getScaledValue();
+		if(bIsDanceSync) {
+			syncDanceValues = mDanceValues;
+			bUpdateDanceFromSync = true;
+		}
+	}
 
-	// management stuff
+	/////// management stuff
 	else if(name.compare("Synchronize Gaze") == 0){
 		bIsGazeSync = ((ofxUIButton*)args.widget)->getValue();
 		if(bIsGazeSync) {
@@ -281,7 +298,7 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 				// keep dance values up-to-date
 				mDanceValues.panCenter = mGazeValues.pan;
 				mDanceValues.tiltCenter = mGazeValues.tilt;
-				bUpdateGuiFromValues = true;
+				bUpdateGazeGuiFromValues = true;
 			}
 			// add to set of sync panels
 			theSyncGazePanels.insert(this);
@@ -289,6 +306,25 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 		else {
 			// remove from vector of sync panels
 			theSyncGazePanels.erase(this);
+		}
+	}
+	else if(name.compare("Synchronize Dance") == 0){
+		bIsDanceSync = ((ofxUIButton*)args.widget)->getValue();
+		if(bIsDanceSync) {
+			// if first item, copy to syncValue
+			if(theSyncDancePanels.size() < 1){
+				syncDanceValues = mDanceValues;
+			}
+			else{
+				mDanceValues = syncDanceValues;
+				//bUpdateGuiFromValues = true;
+			}
+			// add to set of sync panels
+			theSyncDancePanels.insert(this);
+		}
+		else {
+			// remove from vector of sync panels
+			theSyncDancePanels.erase(this);
 		}
 	}
 	else if((name.compare("Remove") == 0) && (((ofxUIButton*)args.widget)->getValue())){
@@ -369,27 +405,27 @@ void MyKeeponControlPanel::sendSyncPanAndTilt() {
 	for(set<MyKeeponControlPanel*>::const_iterator it=theSyncGazePanels.begin(); it!=theSyncGazePanels.end(); ++it){
 		(*it)->mGazeValues = syncGazeValues;
 		(*it)->sendPanAndTilt();
-		(*it)->bUpdateGuiFromValues = true;
+		(*it)->bUpdateGazeGuiFromValues = true;
 	}
 }
 void MyKeeponControlPanel::sendSyncPanSpeed() {
 	for(set<MyKeeponControlPanel*>::const_iterator it=theSyncGazePanels.begin(); it!=theSyncGazePanels.end(); ++it){
 		(*it)->mGazeValues = syncGazeValues;
 		(*it)->sendPanSpeed();
-		(*it)->bUpdateGuiFromValues = true;
+		(*it)->bUpdateGazeGuiFromValues = true;
 	}
 }
 void MyKeeponControlPanel::sendSyncTiltSpeed() {
 	for(set<MyKeeponControlPanel*>::const_iterator it=theSyncGazePanels.begin(); it!=theSyncGazePanels.end(); ++it){
 		(*it)->mGazeValues = syncGazeValues;
 		(*it)->sendTiltSpeed();
-		(*it)->bUpdateGuiFromValues = true;
+		(*it)->bUpdateGazeGuiFromValues = true;
 	}
 }
 void MyKeeponControlPanel::sendSyncSideSpeed() {
 	for(set<MyKeeponControlPanel*>::const_iterator it=theSyncGazePanels.begin(); it!=theSyncGazePanels.end(); ++it){
 		(*it)->mGazeValues = syncGazeValues;
 		(*it)->sendSideSpeed();
-		(*it)->bUpdateGuiFromValues = true;
+		(*it)->bUpdateGazeGuiFromValues = true;
 	}
 }
