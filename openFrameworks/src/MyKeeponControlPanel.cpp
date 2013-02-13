@@ -33,8 +33,6 @@ mGui(p.x,p.y,0,0) {
 
 	//////////////// my GUI
 	mGui.setFont("verdana.ttf");
-	mGui.addWidgetDown(new ofxUILabel("Control Panel", OFX_UI_FONT_MEDIUM));
-	mGui.addSpacer(mGui.getRect()->width,4);
 	////// Serial Port list
 	mSerialList = (ofxUIDropDownList*) mGui.addWidgetDown(new ofxUIDropDownList("Serial List", updateSerialList()));
 	mSerialList->setAutoClose(true);
@@ -48,7 +46,7 @@ mGui(p.x,p.y,0,0) {
 	mTiltSpeed = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Tilt Speed", 0,1, 0.5,10*tDim,tDim));
 	mSideSpeed = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("PonSide Speed", 0,1, 0.5,10*tDim,tDim));
 	// synch button
-	mGui.addWidgetDown(new ofxUIToggle("Synchronize",false,tDim,tDim,0,0,OFX_UI_FONT_MEDIUM));
+	mGui.addWidgetDown(new ofxUIToggle("Synchronize",false,tDim,tDim,0,0,OFX_UI_FONT_SMALL));
 	mGui.addSpacer(10*tDim,5);
 
 	////// Dance interface
@@ -99,11 +97,12 @@ void MyKeeponControlPanel::update(){
 	if(ofGetElapsedTimeMillis()-lastHalfBeat > tBeat/2) {
 		// whether this is the beat or the half-beat
 		bool bOnTheBeat = (ofGetElapsedTimeMillis()%tBeat) < (tBeat/2);
+		mDanceValues.beatPos = syncDanceValues.beatPos;
 
 		// pan dance: enabled && (on the beat or double-time)
 		if((mDanceValues.pan.enabled) && (bOnTheBeat || mDanceValues.pan.doubled)) {
 			// magick to figure out position
-			if((bOnTheBeat&&(mDanceValues.pan.doubled||mDanceValues.beatPos)) ^ mDanceValues.pan.reversed) {
+			if((bOnTheBeat&&(mDanceValues.pan.doubled||syncDanceValues.beatPos)) ^ mDanceValues.pan.reversed) {
 				mValues.pan = mDanceValues.panCenter - 0.11;
 			}
 			else {
@@ -114,7 +113,7 @@ void MyKeeponControlPanel::update(){
 		// tilt dance: enabled && (on the beat or double-time)
 		if((mDanceValues.tilt.enabled) && (bOnTheBeat || mDanceValues.tilt.doubled)) {
 			// magick to figure out position
-			if((bOnTheBeat&&(mDanceValues.tilt.doubled||mDanceValues.beatPos)) ^ mDanceValues.tilt.reversed) {
+			if((bOnTheBeat&&(mDanceValues.tilt.doubled||syncDanceValues.beatPos)) ^ mDanceValues.tilt.reversed) {
 				mValues.tilt = mDanceValues.tiltCenter - 0.4;
 			}
 			else {
@@ -132,7 +131,7 @@ void MyKeeponControlPanel::update(){
 			}
 			//     this is side
 			else {
-				if(bOnTheBeat&&(mDanceValues.side.doubled||mDanceValues.beatPos)) {
+				if(bOnTheBeat&&(mDanceValues.side.doubled||syncDanceValues.beatPos)) {
 					mValues.side = 1;
 				}
 				else {
@@ -150,7 +149,7 @@ void MyKeeponControlPanel::update(){
 		}
 
 		// flip beatPos on whole beats
-		mDanceValues.beatPos ^= bOnTheBeat;
+		syncDanceValues.beatPos = mDanceValues.beatPos ^ bOnTheBeat;
 		lastHalfBeat = ofGetElapsedTimeMillis();
 	}
 }
