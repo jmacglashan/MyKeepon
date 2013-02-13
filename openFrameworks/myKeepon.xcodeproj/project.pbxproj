@@ -56,7 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AFA480451696089E00986842 /* myKeepon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = myKeepon.app; path = /Users/thiago/Documents/BeatBots/MyKeepon/openFrameworks/bin/myKeepon.app; sourceTree = "<absolute>"; };
+		AF8EEFED16C5A3410009DAF1 /* myKeepon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = myKeepon.app; path = /Users/thiago/Documents/BeatBots/MyKeepon/openFrameworks/bin/myKeepon.app; sourceTree = "<absolute>"; };
 		AFB739D616C457B900D61F26 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../../Dev/openFrameworks/libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = "<group>"; };
 		AFB739D716C457B900D61F26 /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../../Dev/openFrameworks/libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = "<group>"; };
 		AFB739F416C46F0500D61F26 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../../Dev/openFrameworks/libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
@@ -351,7 +351,7 @@
 			);
 			name = myKeepon;
 			productName = myOFApp;
-			productReference = AFA480451696089E00986842 /* myKeepon.app */;
+			productReference = AF8EEFED16C5A3410009DAF1 /* myKeepon.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
