@@ -126,31 +126,27 @@ void MyKeeponControlPanel::update(){
 		if((mDanceValues.side.enabled) && (bOnTheBeat || mDanceValues.side.doubled)) {
 			// magick to figure out position
 			// mDanceValues.side.reversed selects between pon and side
-			//    on pon, only move on beat
-			if((mDanceValues.side.reversed) && bOnTheBeat) {
-				if(mDanceValues.side.doubled) {
-					mValues.side = -2;
-					sendSide();
-				}
-				else if(mDanceValues.beatPos) {
-					mValues.side = -2;
-					sendSide();
-				}
+			//     this is pon
+			if(mDanceValues.side.reversed) {
+				mValues.side = 2;
 			}
-
-			/*
-			if(bOnTheBeat&&(mDanceValues.side.doubled||mDanceValues.beatPos)) {
-				mValues.side = 1 + mDanceValues.side.reversed;
-			}
+			//     this is side
 			else {
-				mValues.side = -(1 + mDanceValues.side.reversed);
+				if(bOnTheBeat&&(mDanceValues.side.doubled||mDanceValues.beatPos)) {
+					mValues.side = 1;
+				}
+				else {
+					mValues.side = -1;
+				}
 			}
-			 */
 		}
 
 		// send values
 		if(mDanceValues.pan.enabled || mDanceValues.tilt.enabled) {
 			sendPanAndTilt();
+		}
+		if(mDanceValues.side.enabled) {
+			sendSide();
 		}
 
 		// flip beatPos on whole beats
@@ -331,15 +327,15 @@ void MyKeeponControlPanel::sendSide() {
 				break;
 			}
 			case -2: {
-				msg = "MOVE PON HALFDOWN;";
+				msg = "MOVE PON DOWN;";
+				break;
+			}
+			case 2: {
+				msg = "MOVE PON UP;";
 				break;
 			}
 			default: {
 				msg = "MOVE PON UP;";
-				/*
-				mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
-				msg = "MOVE SIDE CENTERFROMLEFT;";
-				 */
 			}
 		}
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
