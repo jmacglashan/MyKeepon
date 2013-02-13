@@ -57,4 +57,5 @@ class MyKeeponControlPanel{
 		static void sendSyncPanSpeed();
 		static void sendSyncTiltSpeed();
 		static void sendSyncSideSpeed();
+		static void syncDance();
 };

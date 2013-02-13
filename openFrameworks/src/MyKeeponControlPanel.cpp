@@ -281,7 +281,7 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 		mDanceValues.tempo = ((ofxUISlider *)args.widget)->getScaledValue();
 		if(bIsDanceSync) {
 			syncDanceValues = mDanceValues;
-			bUpdateDanceFromSync = true;
+			syncDance();
 		}
 	}
 
@@ -317,7 +317,7 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 			}
 			else{
 				mDanceValues = syncDanceValues;
-				//bUpdateGuiFromValues = true;
+				bUpdateDanceGuiFromValues = true;
 			}
 			// add to set of sync panels
 			theSyncDancePanels.insert(this);
@@ -427,5 +427,12 @@ void MyKeeponControlPanel::sendSyncSideSpeed() {
 		(*it)->mGazeValues = syncGazeValues;
 		(*it)->sendSideSpeed();
 		(*it)->bUpdateGazeGuiFromValues = true;
+	}
+}
+
+void MyKeeponControlPanel::syncDance() {
+	for(set<MyKeeponControlPanel*>::const_iterator it=theSyncDancePanels.begin(); it!=theSyncDancePanels.end(); ++it){
+		(*it)->mDanceValues = syncDanceValues;
+		(*it)->bUpdateDanceGuiFromValues = true;
 	}
 }
