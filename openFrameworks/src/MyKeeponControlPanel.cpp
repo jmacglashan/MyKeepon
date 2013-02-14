@@ -60,7 +60,11 @@ mGui(p.x,p.y,0,0) {
 	mTempoDance = (ofxUISlider*) mGui.addWidgetDown(new ofxUISlider("Tempo", 0,1, 0.5,10*tDim,tDim));
 	// synch button
 	mGui.addWidgetDown(new ofxUIToggle("Synchronize Dance",false,tDim,tDim,0,0,OFX_UI_FONT_SMALL));
+	mGui.addSpacer(10*tDim,5);
 
+	// script buttons
+	mGui.addWidgetDown(new ofxUILabelButton("Load Script", false));
+	mGui.addWidgetRight(new ofxUILabelButton("Play",false));
 	mGui.addSpacer(10*tDim,5);
 
 	// remove button
