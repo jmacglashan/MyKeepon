@@ -122,12 +122,11 @@ void MyKeeponControlPanel::update(){
 	if(ofGetElapsedTimeMillis()-lastHalfBeat > tBeat/2) {
 		// whether this is the beat or the half-beat
 		bool bOnTheBeat = (ofGetElapsedTimeMillis()%tBeat) < (tBeat/2);
-		mDanceValues.beatPos = syncDanceValues.beatPos;
 
 		// pan dance: enabled && (on the beat or double-time)
 		if((mDanceValues.pan.enabled) && (bOnTheBeat || mDanceValues.pan.doubled)) {
 			// magick to figure out position
-			if((bOnTheBeat&&(mDanceValues.pan.doubled||syncDanceValues.beatPos)) ^ mDanceValues.pan.reversed) {
+			if((bOnTheBeat&&(mDanceValues.pan.doubled||mDanceValues.beatPos)) ^ mDanceValues.pan.reversed) {
 				mGazeValues.pan = mDanceValues.panCenter - 0.11;
 			}
 			else {
@@ -138,7 +137,7 @@ void MyKeeponControlPanel::update(){
 		// tilt dance: enabled && (on the beat or double-time)
 		if((mDanceValues.tilt.enabled) && (bOnTheBeat || mDanceValues.tilt.doubled)) {
 			// magick to figure out position
-			if((bOnTheBeat&&(mDanceValues.tilt.doubled||syncDanceValues.beatPos)) ^ mDanceValues.tilt.reversed) {
+			if((bOnTheBeat&&(mDanceValues.tilt.doubled||mDanceValues.beatPos)) ^ mDanceValues.tilt.reversed) {
 				mGazeValues.tilt = mDanceValues.tiltCenter - 0.4;
 			}
 			else {
@@ -156,7 +155,7 @@ void MyKeeponControlPanel::update(){
 			}
 			//     this is side
 			else {
-				if(bOnTheBeat&&(mDanceValues.side.doubled||syncDanceValues.beatPos)) {
+				if(bOnTheBeat&&(mDanceValues.side.doubled||mDanceValues.beatPos)) {
 					mGazeValues.side = 1;
 				}
 				else {
@@ -174,7 +173,7 @@ void MyKeeponControlPanel::update(){
 		}
 
 		// flip beatPos on whole beats
-		syncDanceValues.beatPos = mDanceValues.beatPos ^ bOnTheBeat;
+		mDanceValues.beatPos ^= bOnTheBeat;
 		lastHalfBeat = ofGetElapsedTimeMillis();
 	}
 }
@@ -364,7 +363,7 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 			theSyncDancePanels.erase(this);
 		}
 	}
-	
+
 	//////// 
 	else if((name.compare("Remove") == 0) && (((ofxUIButton*)args.widget)->getValue())){
 		bDelete = true;
