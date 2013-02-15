@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF9E5CE916CDCE6700FD0992 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF9E5CE416CDCE6700FD0992 /* main.cpp */; };
+		AF9E5CEA16CDCE6700FD0992 /* MyKeeponControlPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF9E5CE516CDCE6700FD0992 /* MyKeeponControlPanel.cpp */; };
+		AF9E5CEB16CDCE6700FD0992 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF9E5CE716CDCE6700FD0992 /* testApp.cpp */; };
 		AFB739F116C46B8C00D61F26 /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AFB739DC16C457B900D61F26 /* openFrameworksDebug.a */; };
 		AFB739F616C46F2F00D61F26 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFB739F416C46F0500D61F26 /* GLUT.framework */; };
-		AFB739FA16C4701D00D61F26 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB739F716C4701D00D61F26 /* main.cpp */; };
-		AFB739FB16C4701D00D61F26 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB739F816C4701D00D61F26 /* testApp.cpp */; };
 		AFB73FFC16C4740500D61F26 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB73FF516C4740500D61F26 /* tinyxml.cpp */; };
 		AFB73FFD16C4740500D61F26 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB73FF716C4740500D61F26 /* tinyxmlerror.cpp */; };
 		AFB73FFE16C4740500D61F26 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB73FF816C4740500D61F26 /* tinyxmlparser.cpp */; };
 		AFB73FFF16C4740500D61F26 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB73FFA16C4740500D61F26 /* ofxXmlSettings.cpp */; };
-		AFB7400216C492E800D61F26 /* MyKeeponControlPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB7400016C492E800D61F26 /* MyKeeponControlPanel.cpp */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
 		E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */; };
@@ -56,13 +56,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AF8EEFED16C5A3410009DAF1 /* myKeepon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = myKeepon.app; path = /Users/thiago/Documents/BeatBots/MyKeepon/openFrameworks/bin/myKeepon.app; sourceTree = "<absolute>"; };
+		AF9E5CDF16CDCA5E00FD0992 /* myKeeponDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myKeeponDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF9E5CE316CDCE3A00FD0992 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		AF9E5CE416CDCE6700FD0992 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		AF9E5CE516CDCE6700FD0992 /* MyKeeponControlPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyKeeponControlPanel.cpp; sourceTree = "<group>"; };
+		AF9E5CE616CDCE6700FD0992 /* MyKeeponControlPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyKeeponControlPanel.h; sourceTree = "<group>"; };
+		AF9E5CE716CDCE6700FD0992 /* testApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testApp.cpp; sourceTree = "<group>"; };
+		AF9E5CE816CDCE6700FD0992 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testApp.h; sourceTree = "<group>"; };
 		AFB739D616C457B900D61F26 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../../Dev/openFrameworks/libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = "<group>"; };
 		AFB739D716C457B900D61F26 /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../../Dev/openFrameworks/libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = "<group>"; };
 		AFB739F416C46F0500D61F26 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../../Dev/openFrameworks/libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
-		AFB739F716C4701D00D61F26 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		AFB739F816C4701D00D61F26 /* testApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testApp.cpp; sourceTree = "<group>"; };
-		AFB739F916C4701D00D61F26 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testApp.h; sourceTree = "<group>"; };
 		AFB73F1716C473D100D61F26 /* ofxUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxUI.h; sourceTree = "<group>"; };
 		AFB73F1816C473D100D61F26 /* ofxUI2DPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxUI2DPad.h; sourceTree = "<group>"; };
 		AFB73F1916C473D100D61F26 /* ofxUIBiLabelSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxUIBiLabelSlider.h; sourceTree = "<group>"; };
@@ -109,8 +112,6 @@
 		AFB73FF816C4740500D61F26 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
 		AFB73FFA16C4740500D61F26 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
 		AFB73FFB16C4740500D61F26 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
-		AFB7400016C492E800D61F26 /* MyKeeponControlPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyKeeponControlPanel.cpp; sourceTree = "<group>"; };
-		AFB7400116C492E800D61F26 /* MyKeeponControlPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyKeeponControlPanel.h; sourceTree = "<group>"; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
@@ -124,7 +125,6 @@
 		E4C2424410CC5A17004149E2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		E4C2424510CC5A17004149E2 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		E7E077E415D3B63C0020DFD4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		E7E077E715D3B6510020DFD4 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		E7F985F515E0DE99003869B5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
@@ -303,23 +303,24 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				AF9E5CE316CDCE3A00FD0992 /* Project.xcconfig */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
-				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				AFB73D5316C473A200D61F26 /* addons */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
+				AF9E5CDF16CDCA5E00FD0992 /* myKeeponDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				AFB739F716C4701D00D61F26 /* main.cpp */,
-				AFB739F816C4701D00D61F26 /* testApp.cpp */,
-				AFB739F916C4701D00D61F26 /* testApp.h */,
-				AFB7400016C492E800D61F26 /* MyKeeponControlPanel.cpp */,
-				AFB7400116C492E800D61F26 /* MyKeeponControlPanel.h */,
+				AF9E5CE416CDCE6700FD0992 /* main.cpp */,
+				AF9E5CE516CDCE6700FD0992 /* MyKeeponControlPanel.cpp */,
+				AF9E5CE616CDCE6700FD0992 /* MyKeeponControlPanel.h */,
+				AF9E5CE716CDCE6700FD0992 /* testApp.cpp */,
+				AF9E5CE816CDCE6700FD0992 /* testApp.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -351,7 +352,7 @@
 			);
 			name = myKeepon;
 			productName = myOFApp;
-			productReference = AF8EEFED16C5A3410009DAF1 /* myKeepon.app */;
+			productReference = AF9E5CDF16CDCA5E00FD0992 /* myKeeponDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -416,13 +417,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFB739FA16C4701D00D61F26 /* main.cpp in Sources */,
-				AFB739FB16C4701D00D61F26 /* testApp.cpp in Sources */,
 				AFB73FFC16C4740500D61F26 /* tinyxml.cpp in Sources */,
 				AFB73FFD16C4740500D61F26 /* tinyxmlerror.cpp in Sources */,
 				AFB73FFE16C4740500D61F26 /* tinyxmlparser.cpp in Sources */,
 				AFB73FFF16C4740500D61F26 /* ofxXmlSettings.cpp in Sources */,
-				AFB7400216C492E800D61F26 /* MyKeeponControlPanel.cpp in Sources */,
+				AF9E5CE916CDCE6700FD0992 /* main.cpp in Sources */,
+				AF9E5CEA16CDCE6700FD0992 /* MyKeeponControlPanel.cpp in Sources */,
+				AF9E5CEB16CDCE6700FD0992 /* testApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,7 +432,6 @@
 /* Begin XCBuildConfiguration section */
 		E4B69B4E0A3A1720003C02F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH)";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
@@ -460,7 +460,6 @@
 		};
 		E4B69B4F0A3A1720003C02F2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH)";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
