@@ -303,8 +303,8 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
-				AF9E5CE316CDCE3A00FD0992 /* Project.xcconfig */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
+				AF9E5CE316CDCE3A00FD0992 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				AFB73D5316C473A200D61F26 /* addons */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
@@ -432,6 +432,7 @@
 /* Begin XCBuildConfiguration section */
 		E4B69B4E0A3A1720003C02F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF9E5CE316CDCE3A00FD0992 /* Project.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH)";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
@@ -460,6 +461,7 @@
 		};
 		E4B69B4F0A3A1720003C02F2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF9E5CE316CDCE3A00FD0992 /* Project.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH)";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
