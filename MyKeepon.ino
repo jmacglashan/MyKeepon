@@ -366,7 +366,7 @@ void loop() {
 
     if (Serial.available() > 0) {
       int i = 0;
-      while ((msg[i++] = Serial.read()) != ';' && i < 30 && analogRead(0) > 512) {
+      while ((msg[i++] = Serial.read()) != ';' && i < 29 && analogRead(0) > 512) {
         while (Serial.available() <= 0 && analogRead(0) > 512);
       }
       msg[i] = '\0';
