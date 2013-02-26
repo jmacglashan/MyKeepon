@@ -1,33 +1,47 @@
 #include "ScriptReader.h"
 
 ScriptReader::ScriptReader() {
-	currCommand = 0;
+	this->reset();
 }
 ScriptReader::~ScriptReader() {}
 
 void ScriptReader::loadScript(const string fileName) {
 	theXml.loadFile(fileName);
+	this->reset();
 }
 
-const string ScriptReader::getCommand() {
-	// clamp currCommand to last tag
-	currCommand = (currCommand >= theXml.getNumTags("cmd"))?(theXml.getNumTags("cmd")-1):currCommand;
-	return theXml.getValue("cmd", "", currCommand);
-
+const string& ScriptReader::getCommand() const {
+	return currCommand;
 }
-const unsigned int ScriptReader::getDelay() {
-	// clamp currCommand to last tag
-	currCommand = (currCommand >= theXml.getNumTags("cmd"))?(theXml.getNumTags("cmd")-1):currCommand;
-	return theXml.getAttribute("cmd", "time", 0, currCommand);
+const unsigned int& ScriptReader::getDelay() const {
+	return currDelay;
 }
 
-// currCommand can point to one past last tag
+// currCommandIndex can point to one past last tag
 void ScriptReader::popCommand() {
-	if(currCommand < theXml.getNumTags("cmd")) {
-		currCommand++;
+	if(currCommandIndex < theXml.getNumTags("cmd")-1) {
+		currCommandIndex++;
+		currCommand = theXml.getValue("cmd", "", currCommandIndex);
+		currDelay = theXml.getAttribute("cmd", "time", 1e10, currCommandIndex);
+	}
+	else if(currCommandIndex < theXml.getNumTags("cmd")) {
+		currCommandIndex++;
+		// now currCommandIndex points beyond last tag, but currComand and currDelay have last tag values
 	}
 }
 
 const bool ScriptReader::hasCommand() {
-	return (currCommand < theXml.getNumTags("cmd"));
+	return (currCommandIndex < theXml.getNumTags("cmd"));
 }
+
+void ScriptReader::reset() {
+	currCommandIndex = 0;
+	currCommand = "";
+	currDelay = 1e10;
+
+	if(theXml.bDocLoaded) {
+		currCommand = theXml.getValue("cmd", "", currCommandIndex);
+		currDelay = theXml.getAttribute("cmd", "time", 1e10, currCommandIndex);
+	}
+}
+

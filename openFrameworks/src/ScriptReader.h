@@ -6,11 +6,14 @@ class ScriptReader{
 		ScriptReader();
 		~ScriptReader();
 		void loadScript(string fileName);
-		const string getCommand();
-		const unsigned int getDelay();
+		const string& getCommand() const;
+		const unsigned int& getDelay() const;
 		void popCommand();
 		const bool hasCommand();
+		void reset();
 	private:
 		ofxXmlSettings theXml;
-		unsigned int currCommand;
+		unsigned int currCommandIndex;
+		string currCommand;
+		unsigned int currDelay;
 };
