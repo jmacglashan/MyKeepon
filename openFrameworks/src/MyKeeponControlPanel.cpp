@@ -186,7 +186,7 @@ void MyKeeponControlPanel::update(){
 	// scripting DEBUG
 	if(isScriptLoaded && mScript.hasCommand()) {
 		cout << mScript.getDelay() << " " << mScript.getCommand() << endl;
-		mScript.popCommand();
+		mScript.getNextCommand();
 	}
 }
 

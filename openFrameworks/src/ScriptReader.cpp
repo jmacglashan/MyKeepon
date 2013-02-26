@@ -18,15 +18,15 @@ const unsigned int& ScriptReader::getDelay() const {
 }
 
 // currCommandIndex can point to one past last tag
-void ScriptReader::popCommand() {
-	if(currCommandIndex < theXml.getNumTags("cmd")-1) {
+void ScriptReader::getNextCommand() {
+	if(currCommandIndex < (theXml.getNumTags("cmd")-1)) {
 		currCommandIndex++;
 		currCommand = theXml.getValue("cmd", "", currCommandIndex);
 		currDelay = theXml.getAttribute("cmd", "time", 1e10, currCommandIndex);
 	}
 	else if(currCommandIndex < theXml.getNumTags("cmd")) {
 		currCommandIndex++;
-		// now currCommandIndex points beyond last tag, but currComand and currDelay have last tag values
+		// currCommandIndex now points beyond last tag
 	}
 }
 
@@ -39,7 +39,8 @@ void ScriptReader::reset() {
 	currCommand = "";
 	currDelay = 1e10;
 
-	if(theXml.bDocLoaded) {
+	// see if the doc is loaded...
+	if(theXml.getNumTags("cmd") > 0) {
 		currCommand = theXml.getValue("cmd", "", currCommandIndex);
 		currDelay = theXml.getAttribute("cmd", "time", 1e10, currCommandIndex);
 	}

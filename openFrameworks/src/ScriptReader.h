@@ -8,7 +8,7 @@ class ScriptReader{
 		void loadScript(string fileName);
 		const string& getCommand() const;
 		const unsigned int& getDelay() const;
-		void popCommand();
+		void getNextCommand();
 		const bool hasCommand();
 		void reset();
 	private:
