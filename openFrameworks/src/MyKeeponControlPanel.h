@@ -34,6 +34,7 @@ class MyKeeponControlPanel{
 		ofxUI2DPad* m2DPad;
 		ofxUISlider *mPanSpeed, *mTiltSpeed, *mSideSpeed, *mTempoDance;
 		ofxUIToggleMatrix *mPanDance, *mTiltDance, *mSideDance;
+		ofxUIButton *mPlay, *mLoad;
 		// Serial
 		ofSerial mSerial;
 		// bools
@@ -51,6 +52,7 @@ class MyKeeponControlPanel{
 		// scripted dance variables
 		ScriptReader mScript;
 		bool isScriptPlaying, isScriptLoaded;
+		unsigned long long lastScriptCommand;
 
 		// statics
 		static vector<string> theSerials;

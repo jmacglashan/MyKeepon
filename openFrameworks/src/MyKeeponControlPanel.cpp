@@ -33,6 +33,7 @@ mGui(p.x,p.y,0,0) {
 	lastHalfBeat = ofGetElapsedTimeMillis();
 	// scripting
 	isScriptPlaying = isScriptLoaded = false;
+	lastScriptCommand = ofGetElapsedTimeMillis();
 	// temporary common dimensions variable
 	float tDim = 0;
 
@@ -65,8 +66,10 @@ mGui(p.x,p.y,0,0) {
 	mGui.addSpacer(10*tDim,5);
 
 	// script buttons
-	mGui.addWidgetDown(new ofxUILabelButton("Load Script", false));
-	mGui.addWidgetRight(new ofxUILabelButton("Play",false));
+	mGui.addWidgetDown(new ofxUILabel("Script", OFX_UI_FONT_MEDIUM));
+	mLoad = (ofxUIButton*) mGui.addWidgetDown(new ofxUILabelButton("Load", false));
+	mPlay = (ofxUIButton*) mGui.addWidgetRight(new ofxUILabelButton("Play",false));
+	mGui.addWidgetRight(new ofxUILabelButton("Reset",false));
 	mGui.addSpacer(10*tDim,5);
 
 	// remove button
@@ -183,10 +186,20 @@ void MyKeeponControlPanel::update(){
 		lastHalfBeat = ofGetElapsedTimeMillis();
 	}
 	
-	// scripting DEBUG
-	if(isScriptLoaded && mScript.hasCommand()) {
-		cout << mScript.getDelay() << " " << mScript.getCommand() << endl;
-		mScript.getNextCommand();
+	// scripting control
+	if(isScriptLoaded && isScriptPlaying) {
+		// there's a command to process and its time to process it
+		if(mScript.hasCommand() && (ofGetElapsedTimeMillis()>lastScriptCommand+mScript.getDelay())) {
+			// TODO: send this to serial
+			cout << mScript.getDelay() << " " << mScript.getCommand() << endl;
+			mScript.getNextCommand();
+			lastScriptCommand = ofGetElapsedTimeMillis();
+		}
+		// no more commands
+		else if (!mScript.hasCommand()) {
+			mPlay->setColorBack(OFX_UI_COLOR_BACK);
+			isScriptPlaying = false;
+		}
 	}
 }
 
@@ -377,18 +390,33 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 	}
 
 	//////// Script
-	else if((name.compare("Load Script") == 0) && (((ofxUIButton*)args.widget)->getValue())) {
+	else if((name.compare("Load") == 0) && (((ofxUIButton*)args.widget)->getValue())) {
 		// just in case
 		isScriptLoaded = false;
+		mLoad->setColorBack(OFX_UI_COLOR_BACK);
 		// open XML file
 		ofFileDialogResult mFDR = ofSystemLoadDialog("Pick an xml script file", false, ofToDataPath("",true));
 		if(mFDR.bSuccess) {
 			mScript.loadScript(mFDR.getName());
 			isScriptLoaded = true;
+			mLoad->setColorBack(ofColor(0,100,0));
+			isScriptPlaying = false;
 		}
 	}
 	else if((name.compare("Play") == 0) && (((ofxUIButton*)args.widget)->getValue())) {
 		isScriptPlaying = !isScriptPlaying;
+		if(isScriptLoaded && isScriptPlaying) {
+			lastScriptCommand = ofGetElapsedTimeMillis();
+			((ofxUIButton*)args.widget)->setColorBack(ofColor(0,100,0));
+		}
+		else if(isScriptLoaded && !isScriptPlaying) {
+			((ofxUIButton*)args.widget)->setColorBack(ofColor(100,0,0));
+		}
+	}
+	else if((name.compare("Reset") == 0) && (((ofxUIButton*)args.widget)->getValue())) {
+		mScript.reset();
+		isScriptPlaying = false;
+		mPlay->setColorBack(OFX_UI_COLOR_BACK);
 	}
 
 	//////// 
@@ -459,8 +487,7 @@ void MyKeeponControlPanel::sendTiltSpeed() {
 }
 void MyKeeponControlPanel::sendSideSpeed() {
 	if(bSerialInited) {
-		// TODO: change output min/max to prevent reaching limits
-		string msg = "SPEED PONSIDE "+ofToString((int)ofMap(mGazeValues.sideSpeed, 0,1, 0,255, true))+";";
+		string msg = "SPEED PONSIDE "+ofToString((int)ofMap(mGazeValues.sideSpeed, 0,1, 64,250, true))+";";
 		mSerial.writeBytes((unsigned char*)msg.c_str(), msg.size());
 	}
 }
