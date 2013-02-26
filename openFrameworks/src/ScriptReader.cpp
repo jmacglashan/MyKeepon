@@ -1,7 +1,7 @@
 #include "ScriptReader.h"
 
 ScriptReader::ScriptReader() {
-
+	currCommand = 0;
 }
 ScriptReader::~ScriptReader() {}
 
@@ -10,14 +10,14 @@ void ScriptReader::loadScript(const string fileName) {
 }
 
 const string ScriptReader::getCommand() {
-	// clamp currCommand to not overshoot tags
-	currCommand = (currCommand >= theXml.getNumTags("cmd"))?theXml.getNumTags("cmd")-1:currCommand;
+	// clamp currCommand to last tag
+	currCommand = (currCommand >= theXml.getNumTags("cmd"))?(theXml.getNumTags("cmd")-1):currCommand;
 	return theXml.getValue("cmd", "", currCommand);
 
 }
 const unsigned int ScriptReader::getDelay() {
-	// clamp currCommand to not overshoot tags
-	currCommand = (currCommand >= theXml.getNumTags("cmd"))?theXml.getNumTags("cmd")-1:currCommand;
+	// clamp currCommand to last tag
+	currCommand = (currCommand >= theXml.getNumTags("cmd"))?(theXml.getNumTags("cmd")-1):currCommand;
 	return theXml.getAttribute("cmd", "time", 0, currCommand);
 }
 
