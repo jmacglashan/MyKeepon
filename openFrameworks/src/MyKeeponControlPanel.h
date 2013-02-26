@@ -2,6 +2,7 @@
 
 #include "ofRectangle.h"
 #include "ofxUI.h"
+#include "ScriptReader.h"
 #include <set>
 
 class MyKeeponControlPanel{
@@ -47,6 +48,10 @@ class MyKeeponControlPanel{
 		// dance state variables
 		DanceValues mDanceValues;
 		unsigned long long lastHalfBeat;
+		// scripted dance variables
+		ScriptReader mScript;
+		bool isScriptPlaying, isScriptLoaded;
+
 		// statics
 		static vector<string> theSerials;
 		static vector<string>& updateSerialList();

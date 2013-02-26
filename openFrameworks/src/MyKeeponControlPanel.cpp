@@ -31,6 +31,8 @@ mGui(p.x,p.y,0,0) {
 	bUpdateGazeGuiFromValues = false;
 	bUpdateDanceGuiFromValues = false;
 	lastHalfBeat = ofGetElapsedTimeMillis();
+	// scripting
+	isScriptPlaying = isScriptLoaded = false;
 	// temporary common dimensions variable
 	float tDim = 0;
 
@@ -179,6 +181,12 @@ void MyKeeponControlPanel::update(){
 		// flip beatPos on whole beats
 		mDanceValues.beatPos ^= bOnTheBeat;
 		lastHalfBeat = ofGetElapsedTimeMillis();
+	}
+	
+	// scripting DEBUG
+	if(isScriptLoaded && mScript.hasCommand()) {
+		cout << mScript.getDelay() << " " << mScript.getCommand() << endl;
+		mScript.popCommand();
 	}
 }
 
@@ -366,6 +374,21 @@ void MyKeeponControlPanel::guiListener(ofxUIEventArgs &args){
 			// remove from vector of sync panels
 			theSyncDancePanels.erase(this);
 		}
+	}
+
+	//////// Script
+	else if((name.compare("Load Script") == 0) && (((ofxUIButton*)args.widget)->getValue())) {
+		// just in case
+		isScriptLoaded = false;
+		// open XML file
+		ofFileDialogResult mFDR = ofSystemLoadDialog("Pick an xml script file", false, ofToDataPath("",true));
+		if(mFDR.bSuccess) {
+			mScript.loadScript(mFDR.getName());
+			isScriptLoaded = true;
+		}
+	}
+	else if((name.compare("Play") == 0) && (((ofxUIButton*)args.widget)->getValue())) {
+		isScriptPlaying = !isScriptPlaying;
 	}
 
 	//////// 
