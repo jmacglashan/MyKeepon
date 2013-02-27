@@ -190,7 +190,10 @@ void MyKeeponControlPanel::update(){
 	if(isScriptLoaded && isScriptPlaying) {
 		// there's a command to process and its time to process it
 		if(mScript.hasCommand() && (ofGetElapsedTimeMillis()>lastScriptCommand+mScript.getDelay())) {
-			// TODO: send this to serial
+			// send command to serial
+			if(bSerialInited) {
+				mSerial.writeBytes((unsigned char*)mScript.getCommand().c_str(), mScript.getCommand().size());
+			}
 			cout << mScript.getDelay() << " " << mScript.getCommand() << endl;
 			mScript.getNextCommand();
 			lastScriptCommand = ofGetElapsedTimeMillis();
