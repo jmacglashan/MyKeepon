@@ -27,14 +27,24 @@
 #define BUTTON (byte)0x50 // Button controller (device ID 80). Write to 0xA0, read from 0xA1.
 #define MOTOR (byte)0x55  // Motor controller (device ID 85).  Write to 0xAA, read from 0xAB.
 
+char msg[32];
+byte device, cmd[2];
+
+
 void setup()
 {
+  
+  
   pinMode(SDA, OUTPUT); // Data wire on My Keepon
   pinMode(SCL, OUTPUT); // Clock wire on My Keepon
   digitalWrite(SDA, LOW);
   digitalWrite(SCL, LOW);
   Serial.begin(115200);
   while(!Serial);
+  Serial.println("Setup.");
+  
+  bootup();
+  
 }
 
 void bootup()
@@ -356,9 +366,33 @@ void query() {
 }
 
 void loop() {
-  char msg[32];
-  byte device, cmd[2];
+  
+  if(analogRead(0) > 512){
+    
+      
+      if (Serial.available() > 0) {
+        int i = 0;
+        while ((msg[i++] = Serial.read()) != ';' && i < 30 && analogRead(0) > 512) {
+           int waits = 0;
+           while (Serial.available() <= 0 && analogRead(0) > 512 && waits++ < 1000);
 
+        }
+        msg[i] = '\0';
+        if (parseMsg(msg, cmd, &device)) {
+          int result = 1;
+          int attempts = 0;
+          while (result != 0 && attempts++ < 50) {
+            Wire.beginTransmission(device);
+            Wire.write((byte)cmd[0]);
+            Wire.write((byte)cmd[1]);
+            result = (int)Wire.endTransmission();
+          }
+        }
+    }
+    
+  }
+
+  /*
   bootup();
 
   while (analogRead(0) > 512) {
@@ -382,6 +416,10 @@ void loop() {
       }
     }
   }
+  */
+  
+
+  
 }
 
 
