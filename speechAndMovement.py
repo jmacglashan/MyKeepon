@@ -7,25 +7,33 @@ import random
 
 
 class RobotAndSpeechController:
-    def __init__(self, k):
+    def __init__(self, k, movementHandler=None):
         self.k = k
         self.isRunning = False
         self.voice = SpeechVoiceHandler()
-        self.movement = SpeechMovementHandler(k)
+        if movementHandler is None:
+            self.movement = SpeechMovementHandler(k)
+        else:
+            self.movement = movementHandler
 
     def say(self, text):
         self.voice.text = text
         self.movement.text = text
 
         vt = ThreadWrapper(self.voice)
-        mt = ThreadWrapper(self.movement)
+
+        if self.k is not None:
+            mt = ThreadWrapper(self.movement)
 
         vt.start()
-        mt.start()
+
+        if self.k is not None:
+            mt.start()
 
         vt.join()
         self.movement.continueRunning = False
-        mt.join()
+        if self.k is not None:
+            mt.join()
 
 
 class ThreadWrapper(threading.Thread):
